@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF RAG Chatbot By Aman</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        .upload-section {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .upload-area {
+            border: 3px dashed #4facfe;
+            border-radius: 12px;
+            padding: 40px 20px;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .upload-area:hover {
+            background: #e3f2fd;
+            border-color: #2196f3;
+        }
+
+        .upload-btn {
+            background: #4facfe;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .upload-btn:hover {
+            background: #2196f3;
+            transform: translateY(-2px);
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .chat-section {
+            padding: 20px;
+            display: none;
+        }
+
+        .chat-container {
+            height: 350px;
+            border: 2px solid #e3f2fd;
+            border-radius: 12px;
+            padding: 20px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            background: #fafbfc;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+        }
+
+        .user-message {
+            justify-content: flex-end;
+        }
+
+        .bot-message {
+            justify-content: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 75%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .user-message .message-bubble {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .bot-message .message-bubble {
+            background: white;
+            color: #333;
+            border: 2px solid #e3f2fd;
+            border-bottom-left-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .input-section {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        #questionInput {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e3f2fd;
+            border-radius: 25px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        #questionInput:focus {
+            border-color: #4facfe;
+        }
+
+        #askBtn {
+            background: #4facfe;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 15px 25px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 80px;
+        }
+
+        #askBtn:hover {
+            background: #2196f3;
+            transform: translateY(-2px);
+        }
+
+        #askBtn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #4facfe;
+            font-style: italic;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .status {
+            text-align: center;
+            padding: 10px;
+            color: #666;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .file-info {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .suggestions {
+            display: flex;
+            gap: 8px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .suggestion-btn {
+            background: #e3f2fd;
+            border: 2px solid #4facfe;
+            color: #4facfe;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .suggestion-btn:hover {
+            background: #4facfe;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.6em;
+            }
+            
+            .message-bubble {
+                max-width: 85%;
+            }
+            
+            .upload-area {
+                padding: 30px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 PDF Chat Assistant</h1>
+            <p>Upload PDF • Ask Questions • Get Instant Answers</p>
+        </div>
+
+        <div class="upload-section">
+            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                <div style="font-size: 48px; margin-bottom: 15px;">📄</div>
+                <h3 style="color: #333; margin-bottom: 10px;">Upload Your PDF File</h3>
+                <p style="color: #666; margin-bottom: 20px;">Click here or drag & drop your PDF file</p>
+                <button class="upload-btn">Choose PDF File</button>
+                <input type="file" id="fileInput" accept=".pdf">
+            </div>
+            <div class="status" id="uploadStatus">No file selected</div>
+        </div>
+
+        <div class="chat-section" id="chatSection">
+            <div class="chat-container" id="chatContainer">
+                <!-- Chat messages will appear here -->
+            </div>
+
+            <div class="suggestions" id="suggestions">
+                <!-- Suggested questions will appear here -->
+            </div>
+
+            <div class="loading" id="loading">
+                <div>🔍 Searching in your document...</div>
+            </div>
+
+            <div class="input-section">
+                <input type="text" id="questionInput" placeholder="Type your question about the PDF...">
+                <button id="askBtn" onclick="askQuestion()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set up PDF.js worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        
+        let pdfText = '';
+        let currentPDFName = '';
+
+        // File upload handling
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file && file.type === 'application/pdf') {
+                uploadPDF(file);
+            } else {
+                showStatus('❌ Please select a valid PDF file', 'error');
+            }
+        });
+
+        // Enter key support for question input
+        document.getElementById('questionInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                askQuestion();
+            }
+        });
+
+        async function uploadPDF(file) {
+            showStatus('📖 Reading PDF content...', 'loading');
+            
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                
+                // Extract text from all pages
+                let fullText = '';
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    try {
+                        const page = await pdf.getPage(i);
+                        const textContent = await page.getTextContent();
+                        const pageText = textContent.items
+                            .map(item => item.str)
+                            .join(' ')
+                            .replace(/\s+/g, ' ')
+                            .trim();
+                        fullText += pageText + ' ';
+                    } catch (pageError) {
+                        console.log(`Error reading page ${i}`, pageError);
+                    }
+                }
+                
+                pdfText = fullText;
+                currentPDFName = file.name;
+                
+                showStatus(`✅ PDF loaded successfully! Ready for questions.`, 'success');
+                
+                // Show chat section
+                document.getElementById('chatSection').style.display = 'block';
+                
+                // Clear previous chat
+                document.getElementById('chatContainer').innerHTML = '';
+                
+                // Show welcome message
+                addMessage(`Hello! I've loaded your PDF "<strong>${file.name}</strong>". I found ${pdf.numPages} pages of content. Ask me anything about this document!`, 'bot');
+                
+                // Show suggested questions
+                showSuggestedQuestions();
+                
+            } catch (error) {
+                console.error('Error reading PDF:', error);
+                showStatus('❌ Error reading PDF. Please try a different file.', 'error');
+            }
+        }
+
+        function showSuggestedQuestions() {
+            const suggestions = [
+                "What is this document about?",
+                "Give me a summary",
+                "What are the main topics?",
+                "List the key points"
+            ];
+            
+            const suggestionsDiv = document.getElementById('suggestions');
+            suggestionsDiv.innerHTML = '';
+            
+            suggestions.forEach(question => {
+                const btn = document.createElement('button');
+                btn.className = 'suggestion-btn';
+                btn.textContent = question;
+                btn.onclick = function() {
+                    document.getElementById('questionInput').value = question;
+                    askQuestion();
+                };
+                suggestionsDiv.appendChild(btn);
+            });
+        }
+
+        function askQuestion() {
+            const questionInput = document.getElementById('questionInput');
+            const question = questionInput.value.trim();
+            
+            if (!question) {
+                return;
+            }
+            
+            if (!pdfText) {
+                addMessage('Please upload a PDF file first.', 'bot');
+                return;
+            }
+            
+            // Add user message to chat
+            addMessage(question, 'user');
+            questionInput.value = '';
+            
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('askBtn').disabled = true;
+            
+            // Process question after short delay
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('askBtn').disabled = false;
+                
+                const answer = findAnswerInPDF(question);
+                addMessage(answer, 'bot');
+            }, 1000);
+        }
+
+        function findAnswerInPDF(question) {
+            if (!pdfText) {
+                return "No PDF content available. Please upload a PDF file first.";
+            }
+            
+            const questionLower = question.toLowerCase();
+            
+            // Split PDF text into sentences
+            const sentences = pdfText.split(/[.!?]+/).filter(s => s.trim().length > 10);
+            
+            // Find sentences that contain question keywords
+            const questionWords = questionLower.split(' ').filter(word => word.length > 3);
+            const relevantSentences = [];
+            
+            sentences.forEach(sentence => {
+                const sentenceLower = sentence.toLowerCase();
+                let matchScore = 0;
+                
+                questionWords.forEach(word => {
+                    if (sentenceLower.includes(word)) {
+                        matchScore++;
+                    }
+                });
+                
+                if (matchScore > 0) {
+                    relevantSentences.push({
+                        sentence: sentence,
+                        score: matchScore
+                    });
+                }
+            });
+            
+            // Sort by relevance score
+            relevantSentences.sort((a, b) => b.score - a.score);
+            
+            if (relevantSentences.length === 0) {
+                return generateHelpfulResponse(question);
+            }
+            
+            // Build answer from most relevant sentences
+            let answer = "Here's what I found in your document:\n\n";
+            
+            relevantSentences.slice(0, 3).forEach((item, index) => {
+                answer += `• ${item.sentence.trim()}.\n\n`;
+            });
+            
+            answer += "Is this what you were looking for? Feel free to ask more specific questions!";
+            
+            return answer;
+        }
+
+        function generateHelpfulResponse(question) {
+            // Extract some key content from PDF to show what's available
+            const sentences = pdfText.split(/[.!?]+/).filter(s => s.trim().length > 20);
+            const sampleSentences = sentences.slice(0, 3);
+            
+            let response = "I couldn't find specific information about your question in the PDF.\n\n";
+            response += "Here's some content from your document:\n\n";
+            
+            sampleSentences.forEach((sentence, index) => {
+                response += `• ${sentence.substring(0, 100)}...\n\n`;
+            });
+            
+            response += "Try asking about specific topics from this content, or request a summary!";
+            
+            return response;
+        }
+
+        function addMessage(text, sender) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = 'message-bubble';
+            bubbleDiv.innerHTML = text.replace(/\n/g, '<br>');
+            
+            messageDiv.appendChild(bubbleDiv);
+            chatContainer.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('uploadStatus');
+            statusDiv.textContent = message;
+            
+            if (type === 'error') {
+                statusDiv.style.color = '#e74c3c';
+            } else if (type === 'success') {
+                statusDiv.style.color = '#27ae60';
+            } else if (type === 'loading') {
+                statusDiv.style.color = '#3498db';
+            } else {
+                statusDiv.style.color = '#666';
+            }
+        }
+
+        // Drag and drop functionality
+        const uploadArea = document.querySelector('.upload-area');
+        
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.background = '#e3f2fd';
+            this.style.borderColor = '#2196f3';
+        });
+        
+        uploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.style.background = '#f8f9fa';
+            this.style.borderColor = '#4facfe';
+        });
+        
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.background = '#f8f9fa';
+            this.style.borderColor = '#4facfe';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0 && files[0].type === 'application/pdf') {
+                document.getElementById('fileInput').files = files;
+                uploadPDF(files[0]);
+            } else {
+                showStatus('❌ Please drop a valid PDF file', 'error');
+            }
+        });
+
+        // Initialize chat with welcome message
+        addMessage("Welcome! Upload a PDF file to start asking questions about its content.", 'bot');
+    </script>
+</body>
+</html>

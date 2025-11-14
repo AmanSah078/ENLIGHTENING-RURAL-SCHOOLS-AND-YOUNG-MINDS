@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Multi Language Converter</title>
+    <style>
+        .lang-btn {
+            padding: 10px 15px;
+            margin: 5px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .content {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <!-- Language Selection Buttons -->
+    <div style="text-align: center; margin: 20px;">
+        <button class="lang-btn" onclick="changeLanguage('en')">English</button>
+        <button class="lang-btn" onclick="changeLanguage('hi')">Hindi</button>
+        <button class="lang-btn" onclick="changeLanguage('or')">Odia</button>
+        <button class="lang-btn" onclick="changeLanguage('te')">Telugu</button>
+        <button class="lang-btn" onclick="changeLanguage('ta')">Tamil</button>
+    </div>
+
+    <!-- Your Content -->
+    <div class="content" id="translatable-content">
+        <h1 data-key="welcome">Welcome to Our Website</h1>
+        <p data-key="description">This is a sample text that can be translated into multiple Indian languages.</p>
+        <button data-key="learn_more">Learn More</button>
+    </div>
+
+    <script>
+        // Translation dictionary
+        const translations = {
+            'en': {
+                'welcome': 'Welcome to Our Website',
+                'description': 'This is a sample text that can be translated into multiple Indian languages.',
+                'learn_more': 'Learn More'
+            },
+            'hi': {
+                'welcome': 'हमारी वेबसाइट में आपका स्वागत है',
+                'description': 'यह एक नमूना पाठ है जिसे कई भारतीय भाषाओं में अनुवादित किया जा सकता है।',
+                'learn_more': 'अधिक जानें'
+            },
+            'or': {
+                'welcome': 'ଆମର ୱେବସାଇଟକୁ ସ୍ୱାଗତ',
+                'description': 'ଏହା ଏକ ନମୁନା ପାଠ୍ୟ ଯାହାକୁ ଅନେକ ଭାରତୀୟ ଭାଷାରେ ଅନୁବାଦ କରାଯାଇପାରିବ।',
+                'learn_more': 'ଅଧିକ ଶିଖନ୍ତୁ'
+            },
+            'te': {
+                'welcome': 'మా వెబ్‌సైట్‌కు స్వాగతం',
+                'description': 'ఇది ఒక నమూనా వచనం, దీనిని బహుళ భారతీయ భాషల్లోకి అనువదించవచ్చు.',
+                'learn_more': 'మరింత తెలుసుకోండి'
+            }
+        };
+
+        function changeLanguage(lang) {
+            const elements = document.querySelectorAll('[data-key]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-key');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⏰ My Productivity Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .today-card {
+            grid-column: 1 / -1;
+        }
+
+        .card h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        .time-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .time-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .time-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #4a5568;
+        }
+
+        .time-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .time-input input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .time-input input:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #718096;
+            margin-top: 5px;
+        }
+
+        .comparison {
+            margin-top: 20px;
+        }
+
+        .comparison-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: #f7fafc;
+            border-radius: 8px;
+            border-left: 4px solid #e53e3e;
+        }
+
+        .comparison-item.better {
+            border-left-color: #48bb78;
+        }
+
+        .comparison-item.worse {
+            border-left-color: #e53e3e;
+        }
+
+        .activity-log {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .log-item {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .log-item:last-child {
+            border-bottom: none;
+        }
+
+        .log-date {
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .log-stats {
+            display: flex;
+            gap: 15px;
+        }
+
+        .log-stat {
+            font-size: 0.9em;
+            color: #718096;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .weekly-view {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .day-card {
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #e2e8f0;
+        }
+
+        .day-card.sunday {
+            background: #fff5f5;
+            border-color: #fed7d7;
+        }
+
+        .day-card.active {
+            border-color: #667eea;
+            background: #edf2f7;
+        }
+
+        .day-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .day-stats {
+            font-size: 0.8em;
+            color: #718096;
+        }
+
+        .motivation {
+            text-align: center;
+            font-style: italic;
+            color: #718096;
+            margin-top: 10px;
+            padding: 10px;
+            background: #f7fafc;
+            border-radius: 8px;
+            border-left: 4px solid #d69e2e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⏰ My Productivity Tracker</h1>
+            <p>Track your time, improve your productivity! 📈</p>
+        </div>
+
+        <div class="dashboard">
+            <!-- Today's Input Card -->
+            <div class="card today-card">
+                <h2>📊 Today's Time Allocation</h2>
+                <div class="time-inputs">
+                    <div class="time-group">
+                        <label>😴 Sleep Time (hours)</label>
+                        <div class="time-input">
+                            <input type="number" id="sleepTime" min="0" max="24" value="8" step="0.5">
+                        </div>
+                    </div>
+                    <div class="time-group">
+                        <label>📚 Study Time (hours)</label>
+                        <div class="time-input">
+                            <input type="number" id="studyTime" min="0" max="24" value="0" step="0.5">
+                        </div>
+                    </div>
+                    <div class="time-group">
+                        <label>📱 Phone Time (hours)</label>
+                        <div class="time-input">
+                            <input type="number" id="phoneTime" min="0" max="24" value="0" step="0.5">
+                        </div>
+                    </div>
+                    <div class="time-group">
+                        <label>💪 Exercise (hours)</label>
+                        <div class="time-input">
+                            <input type="number" id="exerciseTime" min="0" max="24" value="0" step="0.5">
+                        </div>
+                    </div>
+                    <div class="time-group">
+                        <label>🍽️ Meals & Break (hours)</label>
+                        <div class="time-input">
+                            <input type="number" id="breakTime" min="0" max="24" value="2" step="0.5">
+                        </div>
+                    </div>
+                    <div class="time-group">
+                        <label>🎮 Entertainment (hours)</label>
+                        <div class="time-input">
+                            <input type="number" id="entertainmentTime" min="0" max="24" value="0" step="0.5">
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-save" onclick="saveTodayData()">💾 Save Today's Data</button>
+                
+                <div class="stats" id="todayStats">
+                    <!-- Stats will be populated here -->
+                </div>
+            </div>
+
+            <!-- Yesterday Comparison Card -->
+            <div class="card">
+                <h2>📈 Yesterday vs Today</h2>
+                <div class="comparison" id="comparisonContainer">
+                    <!-- Comparison will be populated here -->
+                </div>
+                <div class="motivation" id="motivationText">
+                    Start tracking to see your progress! 🚀
+                </div>
+            </div>
+
+            <!-- Activity History Card -->
+            <div class="card">
+                <h2>📅 Activity History</h2>
+                <div class="activity-log" id="activityLog">
+                    <!-- Activity log will be populated here -->
+                </div>
+            </div>
+
+            <!-- Weekly View Card -->
+            <div class="card">
+                <h2>🗓️ Weekly Overview</h2>
+                <div class="weekly-view" id="weeklyView">
+                    <!-- Weekly view will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize data
+        let userData = JSON.parse(localStorage.getItem('productivityData')) || {};
+
+        // Days of week
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+            updateComparison();
+            updateActivityLog();
+            updateWeeklyView();
+        });
+
+        function saveTodayData() {
+            const today = new Date().toDateString();
+            const todayData = {
+                sleep: parseFloat(document.getElementById('sleepTime').value) || 0,
+                study: parseFloat(document.getElementById('studyTime').value) || 0,
+                phone: parseFloat(document.getElementById('phoneTime').value) || 0,
+                exercise: parseFloat(document.getElementById('exerciseTime').value) || 0,
+                breaks: parseFloat(document.getElementById('breakTime').value) || 0,
+                entertainment: parseFloat(document.getElementById('entertainmentTime').value) || 0,
+                date: today,
+                day: new Date().getDay()
+            };
+
+            // Calculate total time
+            const totalTime = todayData.sleep + todayData.study + todayData.phone + 
+                            todayData.exercise + todayData.breaks + todayData.entertainment;
+            
+            // Check if total exceeds 24 hours
+            if (totalTime > 24) {
+                alert(`⚠️ Total time exceeds 24 hours! You entered ${totalTime} hours. Please adjust your inputs.`);
+                return;
+            }
+
+            // Calculate free time
+            todayData.freeTime = 24 - totalTime;
+
+            userData[today] = todayData;
+            localStorage.setItem('productivityData', JSON.stringify(userData));
+
+            updateStats();
+            updateComparison();
+            updateActivityLog();
+            updateWeeklyView();
+
+            alert('✅ Today\'s data saved successfully!');
+        }
+
+        function updateStats() {
+            const today = new Date().toDateString();
+            const todayData = userData[today];
+            const statsContainer = document.getElementById('todayStats');
+
+            if (!todayData) {
+                statsContainer.innerHTML = `
+                    <div class="stat-item">
+                        <div class="stat-value">0h</div>
+                        <div class="stat-label">Study Today</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">0h</div>
+                        <div class="stat-label">Phone Today</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">24h</div>
+                        <div class="stat-label">Free Time</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">0%</div>
+                        <div class="stat-label">Productivity</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const productivity = ((todayData.study + todayData.exercise) / 24 * 100).toFixed(1);
+
+            statsContainer.innerHTML = `
+                <div class="stat-item">
+                    <div class="stat-value">${todayData.study}h</div>
+                    <div class="stat-label">Study Today</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${todayData.phone}h</div>
+                    <div class="stat-label">Phone Today</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${todayData.freeTime.toFixed(1)}h</div>
+                    <div class="stat-label">Free Time</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${productivity}%</div>
+                    <div class="stat-label">Productivity</div>
+                </div>
+            `;
+        }
+
+        function updateComparison() {
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            const todayData = userData[today.toDateString()];
+            const yesterdayData = userData[yesterday.toDateString()];
+
+            const comparisonContainer = document.getElementById('comparisonContainer');
+            const motivationText = document.getElementById('motivationText');
+
+            if (!todayData || !yesterdayData) {
+                comparisonContainer.innerHTML = '<p>No data available for comparison yet.</p>';
+                motivationText.textContent = 'Save today\'s data to start tracking your progress! 📊';
+                return;
+            }
+
+            let comparisonHTML = '';
+            let motivation = '';
+
+            // Study time comparison
+            const studyDiff = todayData.study - yesterdayData.study;
+            const studyClass = studyDiff > 0 ? 'better' : studyDiff < 0 ? 'worse' : '';
+            comparisonHTML += `
+                <div class="comparison-item ${studyClass}">
+                    <span>📚 Study Time</span>
+                    <span>${studyDiff > 0 ? '+' : ''}${studyDiff.toFixed(1)}h</span>
+                </div>
+            `;
+
+            // Phone time comparison
+            const phoneDiff = yesterdayData.phone - todayData.phone; // Negative is better
+            const phoneClass = phoneDiff > 0 ? 'better' : phoneDiff < 0 ? 'worse' : '';
+            comparisonHTML += `
+                <div class="comparison-item ${phoneClass}">
+                    <span>📱 Phone Time</span>
+                    <span>${phoneDiff > 0 ? '+' : ''}${phoneDiff.toFixed(1)}h</span>
+                </div>
+            `;
+
+            // Productivity comparison
+            const todayProductivity = (todayData.study + todayData.exercise) / 24 * 100;
+            const yesterdayProductivity = (yesterdayData.study + yesterdayData.exercise) / 24 * 100;
+            const productivityDiff = todayProductivity - yesterdayProductivity;
+            const productivityClass = productivityDiff > 0 ? 'better' : productivityDiff < 0 ? 'worse' : '';
+            comparisonHTML += `
+                <div class="comparison-item ${productivityClass}">
+                    <span>📈 Productivity</span>
+                    <span>${productivityDiff > 0 ? '+' : ''}${productivityDiff.toFixed(1)}%</span>
+                </div>
+            `;
+
+            comparisonContainer.innerHTML = comparisonHTML;
+
+            // Motivation message
+            if (productivityDiff > 5) {
+                motivation = '🎉 Amazing! You\'re more productive than yesterday! Keep it up!';
+            } else if (productivityDiff > 0) {
+                motivation = '👍 Good job! You\'re improving!';
+            } else if (productivityDiff === 0) {
+                motivation = '⚡ Consistent! Try to beat your record tomorrow!';
+            } else {
+                motivation = '💪 Don\'t worry! Tomorrow is a new opportunity to do better!';
+            }
+
+            motivationText.textContent = motivation;
+        }
+
+        function updateActivityLog() {
+            const activityLog = document.getElementById('activityLog');
+            const dates = Object.keys(userData).sort((a, b) => new Date(b) - new Date(a)).slice(0, 7);
+
+            if (dates.length === 0) {
+                activityLog.innerHTML = '<p>No activity data yet. Start tracking your time!</p>';
+                return;
+            }
+
+            let logHTML = '';
+            dates.forEach(date => {
+                const data = userData[date];
+                const dayName = days[new Date(date).getDay()];
+                
+                logHTML += `
+                    <div class="log-item">
+                        <div class="log-date">${dayName}, ${date}</div>
+                        <div class="log-stats">
+                            <span class="log-stat">📚 ${data.study}h</span>
+                            <span class="log-stat">📱 ${data.phone}h</span>
+                            <span class="log-stat">😴 ${data.sleep}h</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            activityLog.innerHTML = logHTML;
+        }
+
+        function updateWeeklyView() {
+            const weeklyView = document.getElementById('weeklyView');
+            const today = new Date();
+            const currentDay = today.getDay();
+
+            let weeklyHTML = '';
+
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() - currentDay + i);
+                const dateString = date.toDateString();
+                const dayData = userData[dateString];
+                const isSunday = i === 0;
+                const isActive = i === currentDay;
+
+                weeklyHTML += `
+                    <div class="day-card ${isSunday ? 'sunday' : ''} ${isActive ? 'active' : ''}">
+                        <div class="day-name">${days[i].substring(0, 3)}</div>
+                        <div class="day-stats">
+                            ${dayData ? `📚${dayData.study}h<br>📱${dayData.phone}h` : 'No data'}
+                        </div>
+                    </div>
+                `;
+            }
+
+            weeklyView.innerHTML = weeklyHTML;
+        }
+
+        // Auto-save every 30 minutes
+        setInterval(() => {
+            if (Object.keys(userData).length > 0) {
+                localStorage.setItem('productivityData', JSON.stringify(userData));
+            }
+        }, 30 * 60 * 1000);
+    </script>
+</body>
+</html>

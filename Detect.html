@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Object Detector - Kids Version</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.18.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial Rounded MT Bold', 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .camera-section, .results-section {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            flex: 1;
+            min-width: 300px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            text-align: center;
+            color: #ffd700;
+        }
+        
+        .camera-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px dashed rgba(255, 255, 255, 0.3);
+        }
+        
+        #webcam, #image-preview, #canvas {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .placeholder-text {
+            color: #ccc;
+            font-size: 1rem;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        button {
+            padding: 12px 16px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 120px;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        button:disabled {
+            background: #6c757d;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        #capture-btn {
+            background: linear-gradient(45deg, #00b894, #00a085);
+        }
+        
+        #upload-btn {
+            background: linear-gradient(45deg, #0984e3, #074b83);
+        }
+        
+        .results-container {
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .prediction-result {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .prediction-label {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #ffd700;
+            text-transform: capitalize;
+        }
+        
+        .prediction-confidence {
+            font-size: 1.1rem;
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .confidence-bar {
+            height: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .confidence-level {
+            height: 100%;
+            background: linear-gradient(90deg, #00b894, #00cec9);
+            border-radius: 12px;
+            transition: width 0.8s ease-in-out;
+        }
+        
+        .status {
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .loading {
+            border-left: 4px solid #fdcb6e;
+        }
+        
+        .success {
+            border-left: 4px solid #00b894;
+        }
+        
+        .error {
+            border-left: 4px solid #e17055;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .object-suggestions {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        
+        .object-suggestions h4 {
+            color: #ffd700;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .suggestion-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+        
+        .suggestion-item {
+            background: rgba(116, 185, 255, 0.3);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .kid-friendly {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .instructions {
+            margin-top: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .instructions h3 {
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Smart Object Detective</h1>
+            <p class="subtitle">Perfect for Kids - Recognizes Common Objects!</p>
+        </header>
+        
+        <div class="main-content">
+            <section class="camera-section">
+                <h2 class="section-title">📸 Take Picture</h2>
+                <div class="camera-container">
+                    <video id="webcam" autoplay playsinline class="hidden"></video>
+                    <canvas id="canvas" class="hidden"></canvas>
+                    <img id="image-preview" class="hidden" alt="Preview">
+                    <div id="placeholder" class="placeholder-text">
+                        👆 Click "Start Camera" to begin!
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <button id="start-camera">🎥 Start Camera</button>
+                    <button id="capture-btn" disabled>📷 Capture & Detect</button>
+                    <button id="upload-btn">📁 Upload Image</button>
+                    <input type="file" id="file-input" accept="image/*" class="hidden">
+                </div>
+                
+                <div class="object-suggestions">
+                    <h4>🔍 Try These Objects:</h4>
+                    <div class="suggestion-list">
+                        <div class="suggestion-item">✏️ Pen/Pencil</div>
+                        <div class="suggestion-item">📱 Phone</div>
+                        <div class="suggestion-item">⌚ Watch</div>
+                        <div class="suggestion-item">🥤 Bottle</div>
+                        <div class="suggestion-item">📓 Book</div>
+                        <div class="suggestion-item">🍎 Apple</div>
+                    </div>
+                </div>
+                
+                <div id="camera-status" class="status hidden">
+                    Camera status will appear here
+                </div>
+            </section>
+            
+            <section class="results-section">
+                <h2 class="section-title">🎯 Detection Results</h2>
+                <div class="results-container">
+                    <div id="default-result" class="prediction-result">
+                        <div style="font-size: 4rem; margin-bottom: 15px;">🔍</div>
+                        <p>Take a picture to see what the object is!</p>
+                    </div>
+                    
+                    <div id="prediction-result" class="prediction-result hidden">
+                        <div class="kid-friendly" id="kid-emoji">🤔</div>
+                        <div class="prediction-label" id="prediction-label">Object Name</div>
+                        <div class="prediction-confidence" id="prediction-confidence">Confidence: 95%</div>
+                        <div class="confidence-bar">
+                            <div class="confidence-level" id="confidence-level"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="model-status" class="status loading">
+                    ⏳ Loading Smart Detective...
+                </div>
+            </section>
+        </div>
+        
+        <div class="instructions">
+            <h3>How to Use:</h3>
+            <p>1. Click "Start Camera" → 2. Show object to camera → 3. Click "Capture & Detect"</p>
+            <p><strong>Tip:</strong> Make sure object is clear and fills most of the screen!</p>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const webcamElement = document.getElementById('webcam');
+        const canvasElement = document.getElementById('canvas');
+        const captureButton = document.getElementById('capture-btn');
+        const startCameraButton = document.getElementById('start-camera');
+        const uploadButton = document.getElementById('upload-btn');
+        const fileInput = document.getElementById('file-input');
+        const imagePreview = document.getElementById('image-preview');
+        const placeholder = document.getElementById('placeholder');
+        const cameraStatus = document.getElementById('camera-status');
+        const modelStatus = document.getElementById('model-status');
+        const predictionResult = document.getElementById('prediction-result');
+        const defaultResult = document.getElementById('default-result');
+        const predictionLabel = document.getElementById('prediction-label');
+        const predictionConfidence = document.getElementById('prediction-confidence');
+        const confidenceLevel = document.getElementById('confidence-level');
+        const kidEmoji = document.getElementById('kid-emoji');
+
+        // Global variables
+        let model = null;
+        let stream = null;
+        let isModelLoaded = false;
+
+        // EXTENSIVE OBJECT MAPPINGS FOR KIDS
+        const kidFriendlyMappings = {
+            // Writing instruments
+            'ballpoint': '✏️ Pen',
+            'ballpoint pen': '✏️ Pen', 
+            'fountain pen': '✏️ Pen',
+            'quill': '✏️ Pen',
+            'ballpoint_pen': '✏️ Pen',
+            'ballpoint pen, ballpoint': '✏️ Pen',
+            'pencil': '✏️ Pencil',
+            'pencil sharpener': '✏️ Pencil Sharpener',
+            
+            // Electronics
+            'mobile phone': '📱 Phone',
+            'cellular telephone': '📱 Phone', 
+            'cell phone': '📱 Phone',
+            'iphone': '📱 Phone',
+            'desktop computer': '💻 Computer',
+            'laptop': '💻 Laptop',
+            'notebook': '💻 Laptop',
+            'notebook computer': '💻 Laptop',
+            
+            // Time
+            'digital clock': '⏰ Clock',
+            'analog clock': '⏰ Clock',
+            'wall clock': '⏰ Clock',
+            'watch': '⌚ Watch',
+            'wristwatch': '⌚ Watch',
+            
+            // Kitchen items
+            'water bottle': '🥤 Water Bottle',
+            'water jug': '🥤 Bottle',
+            'bottle': '🥤 Bottle',
+            'cup': '☕ Cup',
+            'mug': '☕ Mug',
+            'spoon': '🥄 Spoon',
+            'fork': '🍴 Fork',
+            'knife': '🔪 Knife',
+            'plate': '🍽️ Plate',
+            'bowl': '🥣 Bowl',
+            
+            // Food
+            'apple': '🍎 Apple',
+            'banana': '🍌 Banana',
+            'orange': '🍊 Orange',
+            'pizza': '🍕 Pizza',
+            'hotdog': '🌭 Hot Dog',
+            'hamburger': '🍔 Burger',
+            'sandwich': '🥪 Sandwich',
+            
+            // School items
+            'book': '📚 Book',
+            'notebook': '📓 Notebook',
+            'backpack': '🎒 Backpack',
+            'ruler': '📏 Ruler',
+            'eraser': '🧼 Eraser',
+            
+            // Toys
+            'teddy bear': '🧸 Teddy Bear',
+            'doll': '👶 Doll',
+            'ball': '⚽ Ball',
+            'kite': '🪁 Kite',
+            'playing card': '🃏 Cards',
+            
+            // Clothing
+            'hat': '🧢 Hat',
+            'cap': '🧢 Cap',
+            'shoe': '👟 Shoe',
+            'sneaker': '👟 Shoe',
+            'sock': '🧦 Sock',
+            't-shirt': '👕 T-Shirt',
+            
+            // Furniture
+            'chair': '🪑 Chair',
+            'table': '🪑 Table',
+            'desk': '🪑 Desk',
+            'bed': '🛏️ Bed',
+            
+            // Animals
+            'cat': '🐱 Cat',
+            'dog': '🐶 Dog',
+            'bird': '🐦 Bird',
+            'fish': '🐠 Fish',
+            
+            // Vehicles
+            'car': '🚗 Car',
+            'bicycle': '🚲 Bicycle',
+            'truck': '🚚 Truck',
+            'bus': '🚌 Bus'
+        };
+
+        // Emoji mappings for results
+        const emojiMappings = {
+            'pen': '✏️',
+            'pencil': '✏️',
+            'phone': '📱',
+            'computer': '💻',
+            'laptop': '💻',
+            'watch': '⌚',
+            'clock': '⏰',
+            'bottle': '🥤',
+            'cup': '☕',
+            'mug': '☕',
+            'spoon': '🥄',
+            'fork': '🍴',
+            'knife': '🔪',
+            'plate': '🍽️',
+            'bowl': '🥣',
+            'apple': '🍎',
+            'banana': '🍌',
+            'orange': '🍊',
+            'pizza': '🍕',
+            'burger': '🍔',
+            'book': '📚',
+            'backpack': '🎒',
+            'ruler': '📏',
+            'eraser': '🧼',
+            'teddy': '🧸',
+            'doll': '👶',
+            'ball': '⚽',
+            'kite': '🪁',
+            'cards': '🃏',
+            'hat': '🧢',
+            'shoe': '👟',
+            'sock': '🧦',
+            'shirt': '👕',
+            'chair': '🪑',
+            'table': '🪑',
+            'desk': '🪑',
+            'bed': '🛏️',
+            'cat': '🐱',
+            'dog': '🐶',
+            'bird': '🐦',
+            'fish': '🐠',
+            'car': '🚗',
+            'bicycle': '🚲',
+            'truck': '🚚',
+            'bus': '🚌'
+        };
+
+        // Initialize the application
+        async function init() {
+            try {
+                modelStatus.textContent = '🔄 Loading Smart Detective...';
+                
+                model = await mobilenet.load({
+                    version: 2,
+                    alpha: 0.5
+                });
+                
+                isModelLoaded = true;
+                modelStatus.textContent = '✅ Ready to Detect Objects!';
+                modelStatus.className = 'status success';
+                
+                startCameraButton.disabled = false;
+                uploadButton.disabled = false;
+                
+            } catch (error) {
+                console.error('Error loading model:', error);
+                modelStatus.textContent = '❌ Error loading. Please refresh.';
+                modelStatus.className = 'status error';
+            }
+        }
+
+        // Start webcam
+        async function startCamera() {
+            try {
+                cameraStatus.textContent = '📡 Starting camera...';
+                cameraStatus.className = 'status loading';
+                cameraStatus.classList.remove('hidden');
+                
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        width: { ideal: 640 },
+                        height: { ideal: 480 },
+                        facingMode: 'environment'
+                    } 
+                });
+                
+                webcamElement.srcObject = stream;
+                webcamElement.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+                
+                captureButton.disabled = false;
+                cameraStatus.textContent = '✅ Camera ready! Show me an object!';
+                cameraStatus.className = 'status success';
+                
+            } catch (error) {
+                cameraStatus.textContent = '❌ Camera error: ' + error.message;
+                cameraStatus.className = 'status error';
+            }
+        }
+
+        // Capture image from webcam
+        async function captureImage() {
+            if (!isModelLoaded) return;
+            
+            try {
+                modelStatus.textContent = '📸 Taking picture...';
+                
+                const context = canvasElement.getContext('2d');
+                canvasElement.width = webcamElement.videoWidth;
+                canvasElement.height = webcamElement.videoHeight;
+                
+                await new Promise(resolve => setTimeout(resolve, 300));
+                context.drawImage(webcamElement, 0, 0, canvasElement.width, canvasElement.height);
+                
+                canvasElement.classList.remove('hidden');
+                webcamElement.classList.add('hidden');
+                
+                await analyzeImageFromCanvas(canvasElement);
+                
+            } catch (error) {
+                modelStatus.textContent = '❌ Error: ' + error.message;
+                modelStatus.className = 'status error';
+            }
+        }
+
+        // Enhanced analysis with kid-friendly mappings
+        async function analyzeImageFromCanvas(canvas) {
+            try {
+                modelStatus.textContent = '🔍 Looking carefully...';
+                modelStatus.className = 'status loading';
+                
+                const predictions = await model.classify(canvas);
+                const processed = processKidPredictions(predictions);
+                
+                if (processed.length > 0) {
+                    const topPrediction = processed[0];
+                    const confidencePercent = (topPrediction.probability * 100).toFixed(1);
+                    
+                    // Update display
+                    predictionLabel.textContent = topPrediction.displayName;
+                    predictionConfidence.textContent = `Confidence: ${confidencePercent}%`;
+                    confidenceLevel.style.width = `${confidencePercent}%`;
+                    
+                    // Set emoji
+                    const emoji = getEmojiForObject(topPrediction.displayName);
+                    kidEmoji.textContent = emoji;
+                    
+                    defaultResult.classList.add('hidden');
+                    predictionResult.classList.remove('hidden');
+                    
+                    modelStatus.textContent = '✅ Found it!';
+                    modelStatus.className = 'status success';
+                } else {
+                    throw new Error('Could not identify object clearly');
+                }
+                
+            } catch (error) {
+                modelStatus.textContent = '🤔 Not sure what this is. Try another object!';
+                modelStatus.className = 'status error';
+            }
+        }
+
+        // Process predictions for kid-friendly output
+        function processKidPredictions(predictions) {
+            const processed = [];
+            
+            predictions.forEach(pred => {
+                let foundMapping = false;
+                const className = pred.className.toLowerCase();
+                
+                // Check all mappings
+                for (const [key, value] of Object.entries(kidFriendlyMappings)) {
+                    if (className.includes(key.toLowerCase())) {
+                        const displayName = value;
+                        const baseName = value.replace(/[^\w\s]/g, '').trim().toLowerCase();
+                        
+                        processed.push({
+                            className: baseName,
+                            displayName: displayName,
+                            probability: pred.probability,
+                            original: pred.className
+                        });
+                        foundMapping = true;
+                        break;
+                    }
+                }
+                
+                // If no mapping found, use original but make it friendly
+                if (!foundMapping && pred.probability > 0.1) {
+                    const friendlyName = pred.className.replace(/_/g, ' ').toLowerCase();
+                    processed.push({
+                        className: friendlyName,
+                        displayName: friendlyName,
+                        probability: pred.probability,
+                        original: pred.className
+                    });
+                }
+            });
+            
+            // Sort by probability and return top 3
+            return processed.sort((a, b) => b.probability - a.probability).slice(0, 3);
+        }
+
+        // Get emoji for object
+        function getEmojiForObject(objectName) {
+            const name = objectName.toLowerCase();
+            for (const [key, emoji] of Object.entries(emojiMappings)) {
+                if (name.includes(key)) {
+                    return emoji;
+                }
+            }
+            return '🔍'; // Default emoji
+        }
+
+        // Handle image upload
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file || !isModelLoaded) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.onload = function() {
+                    imagePreview.classList.remove('hidden');
+                    placeholder.classList.add('hidden');
+                    canvasElement.classList.add('hidden');
+                    
+                    if (stream) {
+                        stream.getTracks().forEach(track => track.stop());
+                        stream = null;
+                        webcamElement.classList.add('hidden');
+                        captureButton.disabled = true;
+                        cameraStatus.textContent = '📷 Camera stopped.';
+                    }
+                    
+                    analyzeImage(imagePreview);
+                };
+                imagePreview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Analyze uploaded image
+        async function analyzeImage(imgElement) {
+            try {
+                modelStatus.textContent = '🔍 Analyzing...';
+                const predictions = await model.classify(imgElement);
+                const processed = processKidPredictions(predictions);
+                
+                if (processed.length > 0) {
+                    const topPrediction = processed[0];
+                    const confidencePercent = (topPrediction.probability * 100).toFixed(1);
+                    
+                    predictionLabel.textContent = topPrediction.displayName;
+                    predictionConfidence.textContent = `Confidence: ${confidencePercent}%`;
+                    confidenceLevel.style.width = `${confidencePercent}%`;
+                    
+                    const emoji = getEmojiForObject(topPrediction.displayName);
+                    kidEmoji.textContent = emoji;
+                    
+                    defaultResult.classList.add('hidden');
+                    predictionResult.classList.remove('hidden');
+                    
+                    modelStatus.textContent = '✅ Identified!';
+                    modelStatus.className = 'status success';
+                }
+            } catch (error) {
+                modelStatus.textContent = '🤔 Not sure about this one!';
+                modelStatus.className = 'status error';
+            }
+        }
+
+        // Event listeners
+        startCameraButton.addEventListener('click', startCamera);
+        captureButton.addEventListener('click', captureImage);
+        uploadButton.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', handleImageUpload);
+        
+        // Initialize
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerGuide Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --background-color: #f5f6fa;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --card-border: #e1e1e1;
+        }
+
+        [data-theme="dark"] {
+            --background-color: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --text-color: #ffffff;
+            --card-border: #444444;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .title {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .theme-toggle, .language-dropdown {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--text-color);
+            font-size: 1em;
+        }
+
+        .language-dropdown {
+            min-width: 120px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: 1px solid var(--card-border);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            font-size: 1em;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .results-section {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .guidance-section {
+            margin-bottom: 30px;
+        }
+
+        .main-heading {
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .stream-alert {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .success-alert {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .career-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .career-option {
+            display: flex;
+            align-items: flex-start;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            transition: transform 0.3s ease;
+        }
+
+        .career-option:hover {
+            transform: translateY(-3px);
+        }
+
+        .career-icon {
+            font-size: 2em;
+            margin-right: 15px;
+            min-width: 50px;
+        }
+
+        .career-details {
+            flex: 1;
+        }
+
+        .career-details strong {
+            display: block;
+            font-size: 1.2em;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+
+        .salary {
+            color: #4CAF50;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .exams-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .exam-item {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .exam-item strong {
+            color: var(--primary-color);
+        }
+
+        .action-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .action-card {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+        }
+
+        .action-number {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .motivation-box {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--card-border);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .title {
+                font-size: 2em;
+            }
+            
+            .career-options,
+            .exams-list,
+            .action-steps {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                justify-content: center;
+            }
+            
+            .result-actions {
+                flex-direction: column;
+            }
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .pulse-dot {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(2); opacity: 0.1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1 class="title">🎓 CareerGuide Pro</h1>
+                <p class="subtitle">Free AI Career Guidance for ALL Students</p>
+            </div>
+            <div class="controls">
+                <select id="languageDropdown" class="language-dropdown">
+                    <option value="english">English</option>
+                    <option value="hindi">हिन्दी</option>
+                    <option value="odia">ଓଡ଼ିଆ</option>
+                    <option value="bengali">বাংলা</option>
+                    <option value="tamil">தமிழ்</option>
+                    <option value="telugu">తెలుగు</option>
+                </select>
+                <button id="themeToggle" class="theme-toggle">
+                    <span id="themeIcon">🌙</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="card">
+            <form id="careerForm">
+                <div class="form-group">
+                    <label for="studentName">Your Name</label>
+                    <input type="text" id="studentName" placeholder="Enter your name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="qualification">Current Qualification</label>
+                    <select id="qualification" required>
+                        <option value="">Select qualification</option>
+                        <option value="8th-10th">8th-10th Class</option>
+                        <option value="11th-12th">11th-12th Class</option>
+                        <option value="diploma">Diploma</option>
+                        <option value="graduate">Graduate</option>
+                        <option value="post-graduate">Post Graduate</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="streamField" style="display: none;">
+                    <label for="stream">Select Stream (11th-12th)</label>
+                    <select id="stream">
+                        <option value="Science">Science</option>
+                        <option value="Commerce">Commerce</option>
+                        <option value="Arts">Arts</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="streamBranchContainer">
+                    <label for="educationStream">Education Stream</label>
+                    <select id="educationStream">
+                        <option value="Science">Science</option>
+                        <option value="Commerce">Commerce</option>
+                        <option value="Arts">Arts</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="Medical">Medical</option>
+                        <option value="Agriculture">Agriculture</option>
+                        <option value="Law">Law</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="branch">Specialization/Branch</label>
+                    <select id="branch">
+                        <option value="General">Select Specialization</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="interests">Career Interests</label>
+                    <input type="text" id="interests" placeholder="e.g., doctor, engineer, teacher, government job, business" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="futureGoals">Future Goals</label>
+                    <select id="futureGoals">
+                        <option value="government-job">Government Job (Sarkari Naukri)</option>
+                        <option value="private-job">Private Job</option>
+                        <option value="higher-studies">Higher Studies (Masters/PhD)</option>
+                        <option value="business">Start Business</option>
+                        <option value="abroad">Study/Work Abroad</option>
+                        <option value="not-sure">Not Sure Yet</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    🚀 Get Free Career Guidance
+                </button>
+            </form>
+        </div>
+
+        <div id="loadingSection" class="card hidden">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <h3 id="loadingText">Analyzing your career path...</h3>
+            </div>
+        </div>
+
+        <div id="resultsSection" class="card hidden">
+            <h2 id="resultsTitle">Your Career Guidance Results</h2>
+            <div id="guidanceContent"></div>
+            
+            <div class="result-actions">
+                <button class="action-btn" onclick="speakGuidance()">🔊 Read Aloud</button>
+                <button class="action-btn" onclick="downloadGuidance()">📥 Download</button>
+                <button class="action-btn" onclick="shareGuidance()">📤 Share</button>
+                <button class="action-btn" onclick="saveProgress()">💾 Save Progress</button>
+                <button class="action-btn" onclick="resetForm()">🔄 Start Over</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // ---------- Helpers ----------
+            const $ = id => document.getElementById(id);
+
+            function safeGet(id) {
+                const el = $(id);
+                return el || null;
+            }
+
+            // ---------- Multi-language Support ----------
+            const translations = {
+                english: {
+                    title: "🎓 CareerGuide Pro",
+                    subtitle: "Free AI Career Guidance for ALL Students",
+                    namePlaceholder: "Enter your name",
+                    interestsPlaceholder: "e.g., doctor, engineer, teacher, government job, business",
+                    submitBtn: "🚀 Get Free Career Guidance",
+                    qualificationOptions: `
+                        <option value="">Select qualification</option>
+                        <option value="8th-10th">8th-10th Class</option>
+                        <option value="11th-12th">11th-12th Class</option>
+                        <option value="diploma">Diploma</option>
+                        <option value="graduate">Graduate</option>
+                        <option value="post-graduate">Post Graduate</option>
+                    `,
+                    goalsOptions: `
+                        <option value="government-job">Government Job (Sarkari Naukri)</option>
+                        <option value="private-job">Private Job</option>
+                        <option value="higher-studies">Higher Studies (Masters/PhD)</option>
+                        <option value="business">Start Business</option>
+                        <option value="abroad">Study/Work Abroad</option>
+                        <option value="not-sure">Not Sure Yet</option>
+                    `,
+                    streamOptions: `
+                        <option value="Science">Science</option>
+                        <option value="Commerce">Commerce</option>
+                        <option value="Arts">Arts</option>
+                    `,
+                    loadingText: "Analyzing your career path...",
+                    resultsTitle: "Your Career Guidance Results"
+                },
+                hindi: {
+                    title: "🎓 करियरगाइड प्रो",
+                    subtitle: "सभी छात्रों के लिए मुफ्त AI करियर मार्गदर्शन",
+                    namePlaceholder: "अपना नाम दर्ज करें",
+                    interestsPlaceholder: "जैसे, डॉक्टर, इंजीनियर, शिक्षक, सरकारी नौकरी, बिजनेस",
+                    submitBtn: "🚀 मुफ्त करियर मार्गदर्शन प्राप्त करें",
+                    qualificationOptions: `
+                        <option value="">शैक्षणिक योग्यता चुनें</option>
+                        <option value="8th-10th">8वीं-10वीं कक्षा</option>
+                        <option value="11th-12th">11वीं-12वीं कक्षा</option>
+                        <option value="diploma">डिप्लोमा</option>
+                        <option value="graduate">स्नातक</option>
+                        <option value="post-graduate">स्नातकोत्तर</option>
+                    `,
+                    goalsOptions: `
+                        <option value="government-job">सरकारी नौकरी</option>
+                        <option value="private-job">प्राइवेट नौकरी</option>
+                        <option value="higher-studies">उच्च शिक्षा (मास्टर्स/पीएचडी)</option>
+                        <option value="business">बिजनेस शुरू करें</option>
+                        <option value="abroad">विदेश में पढ़ाई/नौकरी</option>
+                        <option value="not-sure">अभी तय नहीं</option>
+                    `,
+                    streamOptions: `
+                        <option value="Science">विज्ञान</option>
+                        <option value="Commerce">वाणिज्य</option>
+                        <option value="Arts">कला</option>
+                    `,
+                    loadingText: "आपके करियर पथ का विश्लेषण किया जा रहा है...",
+                    resultsTitle: "आपके करियर मार्गदर्शन के परिणाम"
+                }
+            };
+
+            // ---------- Language Management ----------
+            let currentLanguage = localStorage.getItem('selectedLanguage') || 'english';
+            
+            function updateUILanguage() {
+                const lang = translations[currentLanguage];
+                
+                // Update UI elements
+                const titleEl = document.querySelector('.title');
+                const subtitleEl = document.querySelector('.subtitle');
+                const studentName = safeGet('studentName');
+                const interests = safeGet('interests');
+                const submitBtnEl = document.querySelector('.submit-btn');
+                const qualificationSelect = safeGet('qualification');
+                const goalsSelect = safeGet('futureGoals');
+                const streamSelect = safeGet('stream');
+                const loadingText = safeGet('loadingText');
+                const resultsTitle = safeGet('resultsTitle');
+
+                if (titleEl) titleEl.textContent = lang.title;
+                if (subtitleEl) subtitleEl.textContent = lang.subtitle;
+                if (studentName) studentName.placeholder = lang.namePlaceholder;
+                if (interests) interests.placeholder = lang.interestsPlaceholder;
+                if (submitBtnEl) submitBtnEl.innerHTML = lang.submitBtn;
+                if (qualificationSelect) qualificationSelect.innerHTML = lang.qualificationOptions;
+                if (goalsSelect) goalsSelect.innerHTML = lang.goalsOptions;
+                if (streamSelect) streamSelect.innerHTML = lang.streamOptions;
+                if (loadingText) loadingText.textContent = lang.loadingText;
+                if (resultsTitle) resultsTitle.textContent = lang.resultsTitle;
+
+                // Update language dropdown
+                const languageDropdown = safeGet('languageDropdown');
+                if (languageDropdown) {
+                    languageDropdown.value = currentLanguage;
+                }
+            }
+
+            // ---------- Language Dropdown Handler ----------
+            const languageDropdown = safeGet('languageDropdown');
+            if (languageDropdown) {
+                languageDropdown.addEventListener('change', function() {
+                    currentLanguage = this.value;
+                    localStorage.setItem('selectedLanguage', currentLanguage);
+                    updateUILanguage();
+                });
+            }
+
+            // ---------- Background animation ----------
+            function createBackgroundDots() {
+                const bgAnimation = document.querySelector('.bg-animation');
+                if (!bgAnimation) return;
+                for (let i = 0; i < 15; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'pulse-dot';
+                    dot.style.left = Math.random() * 100 + '%';
+                    dot.style.top = Math.random() * 100 + '%';
+                    dot.style.animationDelay = Math.random() * 2 + 's';
+                    bgAnimation.appendChild(dot);
+                }
+            }
+
+            // ---------- Theme toggle ----------
+            const themeToggle = safeGet('themeToggle');
+            const themeIcon = safeGet('themeIcon');
+            const body = document.body;
+            if (body) {
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                body.setAttribute('data-theme', savedTheme);
+                if (themeIcon) themeIcon.textContent = savedTheme === 'light' ? '🌙' : '☀️';
+            }
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    const currentTheme = body.getAttribute('data-theme') || 'light';
+                    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                    body.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    if (themeIcon) themeIcon.textContent = newTheme === 'light' ? '🌙' : '☀️';
+                });
+            }
+
+            // ---------- DOM elements (nullable) ----------
+            const form = safeGet('careerForm');
+            const qualification = safeGet('qualification');
+            const streamField = safeGet('streamField');
+            const educationStream = safeGet('educationStream');
+            const branch = safeGet('branch');
+            const loadingSection = safeGet('loadingSection');
+            const resultsSection = safeGet('resultsSection');
+            const guidanceContent = safeGet('guidanceContent');
+            const submitBtn = safeGet('submitBtn');
+
+            // ---------- Branch options ----------
+            const branchOptions = {
+                Science: ['Physics', 'Chemistry', 'Mathematics', 'Biology', 'Computer Science'],
+                Commerce: ['Accountancy', 'Business Studies', 'Economics', 'Mathematics'],
+                Arts: ['History', 'Political Science', 'Geography', 'Psychology'],
+                Engineering: ['Computer Science', 'Mechanical', 'Civil', 'Electrical'],
+                Medical: ['MBBS', 'BDS', 'Physiotherapy', 'Nursing'],
+                Agriculture: ['Agriculture Science', 'Horticulture', 'Forestry'],
+                Law: ['BA LLB', 'BBA LLB', 'BCom LLB'],
+                Other: ['Education', 'Social Work', 'Journalism']
+            };
+
+            if (educationStream && branch) {
+                educationStream.addEventListener('change', function () {
+                    const selectedStream = this.value;
+                    branch.innerHTML = '<option value="General">Select Specialization</option>';
+                    if (branchOptions[selectedStream]) {
+                        branchOptions[selectedStream].forEach(branchName => {
+                            const option = document.createElement('option');
+                            option.value = branchName;
+                            option.textContent = branchName;
+                            branch.appendChild(option);
+                        });
+                    }
+                });
+            }
+
+            // ---------- Qualification change handler ----------
+            if (qualification) {
+                qualification.addEventListener('change', function () {
+                    const selectedQualification = this.value;
+                    if (streamField) streamField.style.display = 'none';
+
+                    if (selectedQualification === '11th-12th') {
+                        if (streamField) streamField.style.display = 'block';
+                    }
+                });
+            }
+
+            // ---------- Utility: get stream based on qualification ----------
+            function getStreamData() {
+                const q = qualification ? qualification.value : '';
+                if (q === '11th-12th') {
+                    const s = safeGet('stream');
+                    return s ? s.value : 'General';
+                } else if (['diploma', 'graduate', 'post-graduate'].includes(q)) {
+                    return educationStream ? educationStream.value : 'General';
+                }
+                return 'General';
+            }
+
+            // ---------- Notification UI ----------
+            function showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: ${type === 'error' ? '#ff6b6b' : type === 'success' ? '#4ecdc4' : 'var(--card-bg, #fff)'};
+                    color: ${type === 'error' ? '#fff' : '#000'};
+                    padding: 12px 18px;
+                    border-radius: 10px;
+                    z-index: 10000;
+                    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+                `;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                setTimeout(() => notification.remove(), 3000);
+            }
+
+            // ---------- Simple Career Guidance System ----------
+            function getCareerGuidance(formData) {
+                const stream = formData.stream.toLowerCase();
+                const interests = formData.interests.toLowerCase();
+
+                // Check for incompatible paths
+                if ((stream.includes('bio') || stream.includes('medical')) && 
+                    (interests.includes('engineer') || interests.includes('software'))) {
+                    return getIncompatibleGuidance(formData, 'Medical', 'Engineering');
+                }
+
+                if ((stream.includes('engineering') || stream.includes('pcm')) && 
+                    interests.includes('doctor') || interests.includes('medical')) {
+                    return getIncompatibleGuidance(formData, 'Engineering', 'Medical');
+                }
+
+                if (stream.includes('commerce') && 
+                    (interests.includes('engineer') || interests.includes('doctor'))) {
+                    return getIncompatibleGuidance(formData, 'Commerce', 'Technical');
+                }
+
+                // If compatible, return direct guidance
+                return getCompatibleGuidance(formData);
+            }
+
+            function getIncompatibleGuidance(formData, currentStream, desiredField) {
+                return `
+                <div class="guidance-section">
+                    <h2 class="main-heading">👋 ${currentLanguage === 'english' ? `Hey ${formData.name}, Let's Find the Right Path!` : `नमस्ते ${formData.name}, सही रास्ता खोजते हैं!`}</h2>
+                </div>
+
+                <div class="guidance-section">
+                    <div class="stream-alert">
+                        <h3>🎯 ${currentLanguage === 'english' ? 'Important Career Information' : 'महत्वपूर्ण करियर जानकारी'}</h3>
+                        <p>${currentLanguage === 'english' ? 
+                            `You're from <strong>${currentStream}</strong> background but interested in <strong>${desiredField}</strong> fields.` :
+                            `आप <strong>${currentStream}</strong> पृष्ठभूमि से हैं लेकिन <strong>${desiredField}</strong> क्षेत्रों में रुचि रखते हैं।`
+                        }</p>
+                        <p><strong>${currentLanguage === 'english' ? 
+                            'Your current stream has different eligibility requirements.' :
+                            'आपकी वर्तमान स्ट्रीम की अलग पात्रता आवश्यकताएँ हैं।'
+                        }</strong></p>
+                        <p class="alert-note">${currentLanguage === 'english' ? 
+                            'But don\'t worry! Here are perfect alternative career options:' :
+                            'लेकिन चिंता न करें! यहाँ बिल्कुल सही वैकल्पिक करियर विकल्प हैं:'
+                        }</p>
+                    </div>
+                </div>
+
+                <div class="guidance-section">
+                    <h3 class="section-title">🚀 ${currentLanguage === 'english' ? 'Perfect Alternative Career Options:' : 'बिल्कुल सही वैकल्पिक करियर विकल्प:'}</h3>
+                    <div class="career-options">
+                        <div class="career-option">
+                            <div class="career-icon">🔬</div>
+                            <div class="career-details">
+                                <strong>${currentLanguage === 'english' ? 'Biomedical Engineering' : 'बायोमेडिकल इंजीनियरिंग'}</strong>
+                                <p>${currentLanguage === 'english' ? 
+                                    'Combine medical knowledge with engineering skills' :
+                                    'चिकित्सा ज्ञान को इंजीनियरिंग कौशल के साथ जोड़ें'
+                                }</p>
+                                <span class="salary">${currentLanguage === 'english' ? 'Salary: ₹8-18 LPA' : 'वेतन: ₹8-18 LPA'}</span>
+                            </div>
+                        </div>
+                        <div class="career-option">
+                            <div class="career-icon">💻</div>
+                            <div class="career-details">
+                                <strong>${currentLanguage === 'english' ? 'Healthcare IT' : 'हेल्थकेयर आईटी'}</strong>
+                                <p>${currentLanguage === 'english' ? 
+                                    'Medical software development & hospital systems' :
+                                    'मेडिकल सॉफ्टवेयर डेवलपमेंट और हॉस्पिटल सिस्टम'
+                                }</p>
+                                <span class="salary">${currentLanguage === 'english' ? 'Salary: ₹5-12 LPA' : 'वेतन: ₹5-12 LPA'}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guidance-section">
+                    <h3 class="section-title">📝 ${currentLanguage === 'english' ? 'Recommended Exams:' : 'अनुशंसित परीक्षाएं:'}</h3>
+                    <div class="exams-list">
+                        <div class="exam-item">
+                            <strong>GATE</strong> - ${currentLanguage === 'english' ? 'Graduate Aptitude Test in Engineering' : 'ग्रेजुएट एप्टीट्यूड टेस्ट इन इंजीनियरिंग'}
+                        </div>
+                        <div class="exam-item">
+                            <strong>BITSAT</strong> - ${currentLanguage === 'english' ? 'For BITS Pilani' : 'बीआईटीएस पिलानी के लिए'}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guidance-section">
+                    <h3 class="section-title">💡 ${currentLanguage === 'english' ? 'Your Action Plan:' : 'आपकी कार्य योजना:'}</h3>
+                    <div class="action-steps">
+                        <div class="action-card">
+                            <div class="action-number">1</div>
+                            <div class="action-content">${currentLanguage === 'english' ? 
+                                'Research alternative fields thoroughly' :
+                                'वैकल्पिक क्षेत्रों का पूरी तरह से शोध करें'
+                            }</div>
+                        </div>
+                        <div class="action-card">
+                            <div class="action-number">2</div>
+                            <div class="action-content">${currentLanguage === 'english' ? 
+                                'Check eligibility for suggested exams' :
+                                'सुझाई गई परीक्षाओं के लिए पात्रता जांचें'
+                            }</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="motivation-box">
+                    <h3>🌟 ${currentLanguage === 'english' ? 'Success Story!' : 'सफलता की कहानी!'}</h3>
+                    <p>${currentLanguage === 'english' ? 
+                        `Your <strong>${currentStream}</strong> background is valuable. Many successful professionals have built amazing careers!` :
+                        `आपकी <strong>${currentStream}</strong> पृष्ठभूमि मूल्यवान है। कई सफल पेशेवरों ने अद्भुत करियर बनाए हैं!`
+                    }</p>
+                    <p><strong>${currentLanguage === 'english' ? 
+                        'Stay Positive + Right Guidance = SUCCESS! 🚀' :
+                        'सकारात्मक रहें + सही मार्गदर्शन = सफलता! 🚀'
+                    }</strong></p>
+                </div>
+                `;
+            }
+
+            function getCompatibleGuidance(formData) {
+                return `
+                <div class="guidance-section">
+                    <h2 class="main-heading">👋 ${currentLanguage === 'english' ? `Hey ${formData.name}, Perfect Career Match! 🎯` : `नमस्ते ${formData.name}, बिल्कुल सही करियर मैच! 🎯`}</h2>
+                    <div class="success-alert">
+                        <h3>✅ ${currentLanguage === 'english' ? 'Excellent News!' : 'बेहतरीन खबर!'}</h3>
+                        <p>${currentLanguage === 'english' ? 
+                            `Your <strong>${formData.stream}</strong> background is perfectly aligned with your interest in <strong>${formData.interests}</strong>!` :
+                            `आपकी <strong>${formData.stream}</strong> पृष्ठभूमि आपकी <strong>${formData.interests}</strong> में रुचि के साथ पूरी तरह से मेल खाती है!`
+                        }</p>
+                        <p>${currentLanguage === 'english' ? 
+                            'You\'re on the right path to build a successful career!' :
+                            'आप एक सफल करियर बनाने के सही रास्ते पर हैं!'
+                        }</p>
+                    </div>
+                </div>
+
+                <div class="guidance-section">
+                    <h3 class="section-title">🎯 ${currentLanguage === 'english' ? 'Career Opportunities:' : 'करियर के अवसर:'}</h3>
+                    <div class="career-options">
+                        <div class="career-option">
+                            <div class="career-icon">💼</div>
+                            <div class="career-details">
+                                <strong>${currentLanguage === 'english' ? 'Direct Career Path' : 'सीधा करियर पथ'}</strong>
+                                <p>${currentLanguage === 'english' ? 
+                                    'Excellent opportunities in your chosen field' :
+                                    'आपके चुने हुए क्षेत्र में उत्कृष्ट अवसर'
+                                }</p>
+                                <span class="salary">${currentLanguage === 'english' ? 'Good Growth Potential' : 'अच्छी विकास क्षमता'}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guidance-section">
+                    <h3 class="section-title">📝 ${currentLanguage === 'english' ? 'Next Steps:' : 'अगले कदम:'}</h3>
+                    <div class="action-steps">
+                        <div class="action-card">
+                            <div class="action-number">1</div>
+                            <div class="action-content">${currentLanguage === 'english' ? 
+                                'Research colleges and courses' :
+                                'कॉलेजों और पाठ्यक्रमों का शोध करें'
+                            }</div>
+                        </div>
+                        <div class="action-card">
+                            <div class="action-number">2</div>
+                            <div class="action-content">${currentLanguage === 'english' ? 
+                                'Prepare for entrance exams' :
+                                'प्रवेश परीक्षाओं की तैयारी करें'
+                            }</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="motivation-box">
+                    <h3>🌟 ${currentLanguage === 'english' ? 'You Can Do It!' : 'आप कर सकते हैं!'}</h3>
+                    <p>${currentLanguage === 'english' ? 
+                        'Your educational background and career interests are perfectly matched!' :
+                        'आपकी शैक्षिक पृष्ठभूमि और करियर रुचियाँ पूरी तरह से मेल खाती हैं!'
+                    }</p>
+                    <p><strong>${currentLanguage === 'english' ? 
+                        'Stay Focused + Work Hard = BRIGHT FUTURE! ✨' :
+                        'ध्यान केंद्रित रखें + कड़ी मेहनत करें = उज्ज्वल भविष्य! ✨'
+                    }</strong></p>
+                </div>
+                `;
+            }
+
+            // ---------- Text-to-speech ----------
+            window.speakGuidance = function() {
+                if (!guidanceContent) return;
+                const text = guidanceContent.innerText || guidanceContent.textContent || '';
+                if (!('speechSynthesis' in window)) {
+                    showNotification('Text-to-speech not supported in your browser', 'error');
+                    return;
+                }
+                
+                const u = new SpeechSynthesisUtterance(text);
+                u.lang = currentLanguage === 'hindi' ? 'hi-IN' : 'en-US';
+                u.rate = 0.9;
+                window.speechSynthesis.speak(u);
+                showNotification('Reading guidance aloud...');
+            }
+
+            // ---------- Download / Share guidance ----------
+            window.downloadGuidance = function() {
+                if (!guidanceContent) return;
+                const text = guidanceContent.innerText || guidanceContent.textContent || '';
+                const blob = new Blob([text], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `career-guidance-${currentLanguage}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(url);
+                showNotification('Guidance downloaded successfully!', 'success');
+            }
+
+            window.shareGuidance = async function() {
+                if (!guidanceContent) return;
+                const text = guidanceContent.innerText || guidanceContent.textContent || '';
+                if (navigator.share) {
+                    try {
+                        await navigator.share({ 
+                            title: `Career Guidance - ${currentLanguage}`, 
+                            text: text.slice(0, 200) + '...'
+                        });
+                        showNotification('Shared successfully!', 'success');
+                    } catch {}
+                } else if (navigator.clipboard) {
+                    await navigator.clipboard.writeText(text);
+                    showNotification('Guidance copied to clipboard!', 'success');
+                } else {
+                    showNotification('Share not supported', 'error');
+                }
+            }
+
+            // ---------- Save / Load progress ----------
+            window.saveProgress = function() {
+                const data = {
+                    name: safeGet('studentName') ? safeGet('studentName').value : '',
+                    qualification: qualification ? qualification.value : '',
+                    stream: getStreamData(),
+                    branch: branch ? branch.value : 'General',
+                    interests: safeGet('interests') ? safeGet('interests').value : '',
+                    futureGoals: safeGet('futureGoals') ? safeGet('futureGoals').value : 'not-sure',
+                    language: currentLanguage
+                };
+                localStorage.setItem('careerFormData', JSON.stringify(data));
+                showNotification('Progress saved successfully!', 'success');
+            }
+
+            function loadSavedProgress() {
+                const raw = localStorage.getItem('careerFormData');
+                if (!raw) return;
+                try {
+                    const data = JSON.parse(raw);
+                    if (safeGet('studentName')) safeGet('studentName').value = data.name || '';
+                    if (qualification) qualification.value = data.qualification || '';
+                    if (safeGet('interests')) safeGet('interests').value = data.interests || '';
+                    if (safeGet('futureGoals')) safeGet('futureGoals').value = data.futureGoals || 'not-sure';
+                    
+                    if (data.language) {
+                        currentLanguage = data.language;
+                        if (safeGet('languageDropdown')) {
+                            safeGet('languageDropdown').value = currentLanguage;
+                        }
+                    }
+
+                    if (data.qualification === '11th-12th') {
+                        if (streamField) streamField.style.display = 'block';
+                        if (safeGet('stream')) safeGet('stream').value = data.stream || '';
+                    }
+                } catch (e) {
+                    console.warn('loadSavedProgress error', e);
+                }
+            }
+
+            // ---------- Reset form ----------
+            window.resetForm = function() {
+                if (!form) return;
+                form.reset();
+                if (streamField) streamField.style.display = 'none';
+                if (resultsSection) resultsSection.style.display = 'none';
+                if (loadingSection) loadingSection.style.display = 'none';
+                form.style.display = 'block';
+                if (submitBtn) submitBtn.disabled = false;
+            }
+
+            // ---------- Form submission ----------
+            if (form) {
+                form.addEventListener('submit', async function (e) {
+                    e.preventDefault();
+
+                    const formData = {
+                        name: safeGet('studentName') ? safeGet('studentName').value.trim() : '',
+                        qualification: qualification ? qualification.value : '',
+                        stream: getStreamData(),
+                        branch: branch ? branch.value : 'General',
+                        interests: safeGet('interests') ? safeGet('interests').value.trim() : '',
+                        futureGoals: safeGet('futureGoals') ? safeGet('futureGoals').value : 'not-sure'
+                    };
+
+                    // Basic validation
+                    if (!formData.name) {
+                        showNotification('Please enter your name', 'error');
+                        return;
+                    }
+                    if (!formData.qualification) {
+                        showNotification('Please select your qualification', 'error');
+                        return;
+                    }
+
+                    if (form) form.style.display = 'none';
+                    if (loadingSection) loadingSection.style.display = 'block';
+                    if (submitBtn) submitBtn.disabled = true;
+
+                    // Simulate API call with timeout
+                    setTimeout(() => {
+                        const guidance = getCareerGuidance(formData);
+
+                        if (loadingSection) loadingSection.style.display = 'none';
+                        if (resultsSection) resultsSection.style.display = 'block';
+                        if (guidanceContent) guidanceContent.innerHTML = guidance;
+
+                        showNotification('Career guidance generated successfully!', 'success');
+                    }, 2000);
+                });
+            }
+
+            // ---------- Initialize the application ----------
+            window.addEventListener('load', function() {
+                loadSavedProgress();
+                updateUILanguage();
+                createBackgroundDots();
+            });
+        });
+    </script>
+</body>
+</html>

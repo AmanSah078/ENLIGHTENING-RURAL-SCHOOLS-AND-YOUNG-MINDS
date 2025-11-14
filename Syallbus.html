@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Career Guide - Exams & IT Paths</title>
+      <link rel="stylesheet" href="/src/styles/Syallbus.css">
+</head>
+<body>
+    <div class="container">
+        <header class="main-header">
+            <h1>🎯 Complete Career Guidance Portal</h1>
+            <p class="subtitle">All Competitive Exams + IT Career Paths in One Place</p>
+        </header>
+
+        <!-- Main Navigation -->
+        <nav class="main-nav">
+            <button class="nav-btn active" onclick="showSection('exams')">📝 Competitive Exams</button>
+            <button class="nav-btn" onclick="showSection('career')">💻 IT Career Paths</button>
+         
+
+           
+        </nav>
+
+        <!-- EXAMS SECTION --> 
+        <section id="exams-section" class="content-section active">
+            <div class="section-header">
+                <h2>🏆 All Competitive Exams</h2>
+                <p>Syllabus, Dates, Notifications & Official Links</p>
+            </div>
+
+            <!-- Exam Categories -->
+            <div class="category-filters">
+                <button class="filter-btn active" onclick="filterExams('all')">All Exams</button>
+                <button class="filter-btn" onclick="filterExams('school')">School Boards</button>
+                <button class="filter-btn" onclick="filterExams('engineering')">Engineering</button>
+                <button class="filter-btn" onclick="filterExams('medical')">Medical</button>
+                <button class="filter-btn" onclick="filterExams('banking')">Banking</button>
+                <button class="filter-btn" onclick="filterExams('ssc')">SSC</button>
+                <button class="filter-btn" onclick="filterExams('upsc')">UPSC</button>
+                <button class="filter-btn" onclick="filterExams('defense')">Defense</button>
+                <button class="filter-btn" onclick="filterExams('other')">Other</button>
+            </div>
+
+            <!-- Exams Grid -->
+            <div class="exams-grid">
+                <!-- School Boards -->
+                <div class="exam-card school" onclick="showExamDetails('cbse10')">
+                    <div class="exam-badge school-badge">School</div>
+                    <h3>CBSE Class 10</h3>
+                    <p>Secondary School Examination</p>
+                    <div class="exam-meta">
+                        <span class="date">📅 Feb-Mar 2025</span>
+                        <span class="official">cbse.nic.in</span>
+                    </div>
+                </div>
+
+                <div class="exam-card school" onclick="showExamDetails('cbse12')">
+                    <div class="exam-badge school-badge">School</div>
+                    <h3>CBSE Class 12</h3>
+                    <p>Senior School Certificate</p>
+                    <div class="exam-meta">
+                        <span class="date">📅 Feb-Mar 2025</span>
+                        <span class="official">cbse.nic.in</span>
+                    </div>
+                </div>
+
+                <!-- Engineering -->
+                <div class="exam-card engineering" onclick="showExamDetails('jeemains')">
+                    <div class="exam-badge engineering-badge">Engineering</div>
+                    <h3>JEE Mains</h3>
+                    <p>Joint Entrance Examination</p>
+                    <div class="exam-meta">
+                        <span class="date">📅 Jan-Apr 2025</span>
+                        <span class="official">jeemain.nta.nic.in</span>
+                    </div>
+                </div>
+<!-- JEE Advanced ke liye simple key use karo -->
+
+                <!-- Medical -->
+                <div class="exam-card medical" onclick="showExamDetails('neet')">
+                    <div class="exam-badge medical-badge">Medical</div>
+                    <h3>NEET UG</h3>
+                    <p>National Eligibility cum Entrance Test</p>
+                    <div class="exam-meta">
+                        <span class="date">📅 May 2025</span>
+                        <span class="official">neet.nta.nic.in</span>
+                    </div>
+                </div>
+
+                <!-- Banking -->
+                <div class="exam-card banking" onclick="showExamDetails('ibpspo')">
+                    <div class="exam-badge banking-badge">Banking</div>
+                    <h3>IBPS PO</h3>
+                    <p>Probationary Officer</p>
+                    <div class="exam-meta">
+                        <span class="date">📅 Oct-Nov 2025</span>
+                        <span class="official">ibps.in</span>
+                    </div>
+                </div>
+
+                <div class="exam-card banking" onclick="showExamDetails('sbipo')">
+                    <div class="exam-badge banking-badge">Banking</div>
+                    <h3>SBI PO</h3>
+                    <p>State Bank PO</p>
+                    <div class="exam-meta">
+                        <span class="date">📅 Oct-Nov 2025</span>
+                        <span class="official">sbi.co.in</span>
+                    </div>
+                </div>
+
+                <!-- SSC -->
+                <div class="exam-card ssc" onclick="showExamDetails('ssccgl')">
+                    <div class="exam-badge ssc-badge">SSC</div>
+                    <h3>SSC CGL</h3>
+                    <p>Combined Graduate Level</p>
+                    <div class="exam-meta">
+                        <span class="date">📅 Jun-Jul 2025</span>
+                        <span class="official">ssc.nic.in</span>
+                    </div>
+                </div>
+
+                <div class="exam-card ssc" onclick="showExamDetails('sscchsl')">
+                    <div class="exam-badge ssc-badge">SSC</div>
+                    <h3>SSC CHSL</h3>
+                    <p>10+2 Level Exam</p>
+                    <div class="exam-meta">
+                        <span class="date">📅 Mar-Apr 2025</span>
+                        <span class="official">ssc.nic.in</span>
+                    </div>
+                </div>
+
+                <!-- UPSC -->
+                <div class="exam-card upsc" onclick="showExamDetails('upsc')">
+                    <div class="exam-badge upsc-badge">UPSC</div>
+                    <h3>UPSC Civil Services</h3>
+                    <p>IAS, IPS, IFS</p>
+                    <div class="exam-meta">
+                        <span class="date">📅 Prelims: May 2025</span>
+                        <span class="official">upsc.gov.in</span>
+                    </div>
+                </div>
+
+                <!-- Defense -->
+                <div class="exam-card defense" onclick="showExamDetails('nda')">
+                    <div class="exam-badge defense-badge">Defense</div>
+                    <h3>NDA</h3>
+                    <p>National Defense Academy</p>
+                    <div class="exam-meta">
+                        <span class="date">📅 Apr & Sep 2025</span>
+                        <span class="official">upsc.gov.in</span>
+                    </div>
+                </div>
+
+                <div class="exam-card defense" onclick="showExamDetails('cds')">
+                    <div class="exam-badge defense-badge">Defense</div>
+                    <h3>CDS</h3>
+                    <p>Combined Defense Services</p>
+                    <div class="exam-meta">
+                        <span class="date">📅 Apr & Sep 2025</span>
+                        <span class="official">upsc.gov.in</span>
+                    </div>
+                </div>
+
+                <!-- Other Exams -->
+                <div class="exam-card other" onclick="showExamDetails('cafoundation')">
+                    <div class="exam-badge other-badge">Other</div>
+                    <h3>CA Foundation</h3>
+                    <p>Chartered Accountancy</p>
+                    <div class="exam-meta">
+                        <span class="date">📅 Jun & Dec 2025</span>
+                        <span class="official">icai.org</span>
+                    </div>
+                </div>
+
+                <div class="exam-card other" onclick="showExamDetails('clat')">
+                    <div class="exam-badge other-badge">Other</div>
+                    <h3>CLAT</h3>
+                    <p>Common Law Admission Test</p>
+                    <div class="exam-meta">
+                        <span class="date">📅 Dec 2025</span>
+                        <span class="official">consortiumofnlus.ac.in</span>
+                    </div>
+                </div>
+
+                <div class="exam-card engineering" onclick="showExamDetails('gate')">
+                    <div class="exam-badge engineering-badge">Engineering</div>
+                    <h3>GATE</h3>
+                    <p>Graduate Aptitude Test in Engineering</p>
+                    <div class="exam-meta">
+                        <span class="date">📅 Feb 2025</span>
+                        <span class="official">gate.iitkgp.ac.in</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CAREER PATHS SECTION -->
+        <section id="career-section" class="content-section">
+            <div class="section-header">
+                <h2>💻 IT & Technology Career Paths</h2>
+                <p>Complete Roadmaps, Skills Required & Salary Guide</p>
+            </div>
+
+            <!-- Career Filters -->
+            <div class="career-filters">
+                <button class="career-filter-btn active" onclick="filterCareers('all')">All Careers</button>
+                <button class="career-filter-btn" onclick="filterCareers('development')">Development</button>
+                <button class="career-filter-btn" onclick="filterCareers('data')">Data & AI</button>
+                <button class="career-filter-btn" onclick="filterCareers('infrastructure')">Infrastructure</button>
+                <button class="career-filter-btn" onclick="filterCareers('security')">Security</button>
+            </div>
+
+            <!-- Careers Grid -->
+            <div class="careers-grid">
+                <!-- Development Careers -->
+                <div class="career-card development" onclick="showCareerDetails('frontend')">
+                    <div class="career-icon">🎨</div>
+                    <h3>Frontend Developer</h3>
+                    <p>UI/UX, Web Design, Client-side Development</p>
+                    <div class="career-tags">
+                        <span class="tech-tag">HTML/CSS</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">React</span>
+                    </div>
+                    <div class="career-salary">💰 ₹4-12 LPA</div>
+                    <div class="career-demand">🔥 High Demand</div>
+                </div>
+
+                <div class="career-card development" onclick="showCareerDetails('backend')">
+                    <div class="career-icon">⚙️</div>
+                    <h3>Backend Developer</h3>
+                    <p>Server, Database, APIs Development</p>
+                    <div class="career-tags">
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Database</span>
+                    </div>
+                    <div class="career-salary">💰 ₹5-15 LPA</div>
+                    <div class="career-demand">🔥 High Demand</div>
+                </div>
+
+                <div class="career-card development" onclick="showCareerDetails('fullstack')">
+                    <div class="career-icon">🔧</div>
+                    <h3>Full Stack Developer</h3>
+                    <p>End-to-end Web Development</p>
+                    <div class="career-tags">
+                        <span class="tech-tag">MERN Stack</span>
+                        <span class="tech-tag">MEAN Stack</span>
+                        <span class="tech-tag">Full Stack</span>
+                    </div>
+                    <div class="career-salary">💰 ₹6-20 LPA</div>
+                    <div class="career-demand">🔥 Very High Demand</div>
+                </div>
+
+                <div class="career-card development" onclick="showCareerDetails('mobile')">
+                    <div class="career-icon">📱</div>
+                    <h3>Mobile Developer</h3>
+                    <p>Android, iOS, Cross-platform Apps</p>
+                    <div class="career-tags">
+                        <span class="tech-tag">React Native</span>
+                        <span class="tech-tag">Flutter</span>
+                        <span class="tech-tag">Kotlin</span>
+                    </div>
+                    <div class="career-salary">💰 ₹5-18 LPA</div>
+                    <div class="career-demand">🔥 High Demand</div>
+                </div>
+
+                <!-- Data & AI Careers -->
+                <div class="career-card data" onclick="showCareerDetails('datascience')">
+                    <div class="career-icon">📊</div>
+                    <h3>Data Scientist</h3>
+                    <p>Analytics, Machine Learning, Insights</p>
+                    <div class="career-tags">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">R</span>
+                        <span class="tech-tag">ML</span>
+                    </div>
+                    <div class="career-salary">💰 ₹8-25 LPA</div>
+                    <div class="career-demand">🚀 Very High Demand</div>
+                </div>
+
+                <div class="career-card data" onclick="showCareerDetails('ai')">
+                    <div class="career-icon">🤖</div>
+                    <h3>AI/ML Engineer</h3>
+                    <p>Artificial Intelligence & Machine Learning</p>
+                    <div class="career-tags">
+                        <span class="tech-tag">TensorFlow</span>
+                        <span class="tech-tag">PyTorch</span>
+                        <span class="tech-tag">Deep Learning</span>
+                    </div>
+                    <div class="career-salary">💰 ₹10-30 LPA</div>
+                    <div class="career-demand">🚀 Exploding Demand</div>
+                </div>
+
+                <div class="career-card data" onclick="showCareerDetails('dataanalyst')">
+                    <div class="career-icon">📈</div>
+                    <h3>Data Analyst</h3>
+                    <p>Data Visualization, Reporting, BI</p>
+                    <div class="career-tags">
+                        <span class="tech-tag">SQL</span>
+                        <span class="tech-tag">Excel</span>
+                        <span class="tech-tag">Tableau</span>
+                    </div>
+                    <div class="career-salary">💰 ₹4-12 LPA</div>
+                    <div class="career-demand">🔥 High Demand</div>
+                </div>
+
+                <!-- Infrastructure Careers -->
+                <div class="career-card infrastructure" onclick="showCareerDetails('devops')">
+                    <div class="career-icon">🔄</div>
+                    <h3>DevOps Engineer</h3>
+                    <p>CI/CD, Cloud, Automation</p>
+                    <div class="career-tags">
+                        <span class="tech-tag">Docker</span>
+                        <span class="tech-tag">Kubernetes</span>
+                        <span class="tech-tag">AWS</span>
+                    </div>
+                    <div class="career-salary">💰 ₹8-22 LPA</div>
+                    <div class="career-demand">🔥 High Demand</div>
+                </div>
+
+                <div class="career-card infrastructure" onclick="showCareerDetails('cloud')">
+                    <div class="career-icon">☁️</div>
+                    <h3>Cloud Engineer</h3>
+                    <p>AWS, Azure, Google Cloud</p>
+                    <div class="career-tags">
+                        <span class="tech-tag">AWS</span>
+                        <span class="tech-tag">Azure</span>
+                        <span class="tech-tag">GCP</span>
+                    </div>
+                    <div class="career-salary">💰 ₹7-20 LPA</div>
+                    <div class="career-demand">🚀 Growing Demand</div>
+                </div>
+
+                <!-- Security Careers -->
+                <div class="career-card security" onclick="showCareerDetails('cybersecurity')">
+                    <div class="career-icon">🔒</div>
+                    <h3>Cyber Security</h3>
+                    <p>Network Security, Ethical Hacking</p>
+                    <div class="career-tags">
+                        <span class="tech-tag">Ethical Hacking</span>
+                        <span class="tech-tag">Network Security</span>
+                        <span class="tech-tag">Pen Testing</span>
+                    </div>
+                    <div class="career-salary">💰 ₹6-18 LPA</div>
+                    <div class="career-demand">🚀 Critical Demand</div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- DETAILS MODAL -->
+        <div id="details-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+                <div id="modal-body">
+                    <!-- Content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <script src="/src/scripts/Syallbus.js"></script>
+</body>
+</html>
