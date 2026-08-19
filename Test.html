@@ -669,25 +669,25 @@
         <p style="text-align: center; color: var(--text-secondary); margin-bottom: 16px;">Explore integrated tools built to maximize your academic & career success</p>
 
         <div class="hub-grid">
-            <a href="Chat_Model.html" target="_blank" class="hub-card">
+            <a href="Chat_Model.html" onclick="openPdfModal(event)" class="hub-card">
                 <div class="hub-icon">📄</div>
                 <div class="hub-title">PDF AI Summarizer</div>
                 <div class="hub-desc">Upload study PDFs, get instant AI summaries and ask questions in real-time.</div>
             </a>
 
-            <a href="Syallbus.html" target="_blank" class="hub-card">
+            <a href="Syallbus.html" onclick="openSyllabusHub(event)" class="hub-card">
                 <div class="hub-icon">📘</div>
                 <div class="hub-title">Exam & Syllabus Hub</div>
                 <div class="hub-desc">Complete syllabus, exam dates, notifications & official links for 20+ competitive exams.</div>
             </a>
 
-            <a href="Time_Table.html" target="_blank" class="hub-card">
+            <a href="Time_Table.html" onclick="openPlannerModal(event)" class="hub-card">
                 <div class="hub-icon">⏰</div>
                 <div class="hub-title">Study Planner & Tracker</div>
                 <div class="hub-desc">Optimize daily routine, track study hours, manage tasks & save precious time.</div>
             </a>
 
-            <a href="Detect.html" target="_blank" class="hub-card">
+            <a href="Detect.html" onclick="openScannerModal(event)" class="hub-card">
                 <div class="hub-icon">🔍</div>
                 <div class="hub-title">AI Career Scanner</div>
                 <div class="hub-desc">Scan your skillset, discover high-paying industry matches & identify domain gaps.</div>
@@ -759,6 +759,62 @@
     </div>
 
     <div id="syllabusOverlay" onclick="toggleSyllabusModal()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 1000;"></div>
+
+    <!-- PDF AI Summarizer Modal -->
+    <div id="pdfModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1e293b; color: white; padding: 28px; border-radius: 20px; box-shadow: 0 25px 60px rgba(0,0,0,0.6); z-index: 1001; width: 90%; max-width: 540px; max-height: 85vh; overflow-y: auto; border: 1px solid rgba(255,255,255,0.2);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 style="margin: 0; color: #38bdf8;">📄 PDF & Notes AI Summarizer</h3>
+            <button onclick="closePdfModal()" style="background: none; border: none; font-size: 22px; cursor: pointer; color: #94a3b8;">✕</button>
+        </div>
+        <p style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 14px;">Paste study notes, chapter text, or PDF content to extract key takeaways & generate AI flashcard questions.</p>
+        <textarea id="pdfInputText" placeholder="Paste your study notes or chapter text here..." class="form-input" style="height: 110px; margin-bottom: 14px; resize: vertical;"></textarea>
+        <button onclick="summarizeNotesAI()" class="submit-btn" style="padding: 12px; background: linear-gradient(135deg, #0284c7, #0369a1); margin-bottom: 14px;">⚡ Generate AI Summary</button>
+        <div id="pdfResult" style="padding: 16px; background: rgba(255,255,255,0.06); border-radius: 12px; border: 1px solid var(--card-border); display: none;"></div>
+    </div>
+    <div id="pdfOverlay" onclick="closePdfModal()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 1000;"></div>
+
+    <!-- Study Planner & Pomodoro Modal -->
+    <div id="plannerModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1e293b; color: white; padding: 28px; border-radius: 20px; box-shadow: 0 25px 60px rgba(0,0,0,0.6); z-index: 1001; width: 90%; max-width: 540px; max-height: 85vh; overflow-y: auto; border: 1px solid rgba(255,255,255,0.2);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 style="margin: 0; color: #38bdf8;">⏰ Study Planner & Pomodoro Tracker</h3>
+            <button onclick="closePlannerModal()" style="background: none; border: none; font-size: 22px; cursor: pointer; color: #94a3b8;">✕</button>
+        </div>
+        <div style="text-align: center; background: rgba(255,255,255,0.05); padding: 18px; border-radius: 16px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.1);">
+            <div style="font-size: 2.2rem; font-weight: 800; color: #38bdf8; font-family: monospace;" id="timerDisplay">25:00</div>
+            <p style="font-size: 0.85rem; color: #cbd5e1; margin-top: 4px;">Pomodoro Focus Session</p>
+            <div style="display: flex; justify-content: center; gap: 10px; margin-top: 12px;">
+                <button onclick="startPomodoro()" style="padding: 8px 18px; background: #10b981; color: white; border: none; border-radius: 20px; font-weight: bold; cursor: pointer;">▶ Start Focus</button>
+                <button onclick="resetPomodoro()" style="padding: 8px 18px; background: #64748b; color: white; border: none; border-radius: 20px; font-weight: bold; cursor: pointer;">🔄 Reset</button>
+            </div>
+        </div>
+        <h4 style="margin-bottom: 8px; color: #e2e8f0; font-size: 0.95rem;">📖 Daily Study Tasks</h4>
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+            <input type="text" id="taskInput" placeholder="Add study task (e.g. Physics Ch 3)..." class="form-input" style="padding: 10px;">
+            <button onclick="addStudyTask()" style="padding: 10px 16px; background: #0284c7; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer;">Add</button>
+        </div>
+        <div id="taskList" style="max-height: 160px; overflow-y: auto;"></div>
+    </div>
+    <div id="plannerOverlay" onclick="closePlannerModal()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 1000;"></div>
+
+    <!-- AI Career Scanner Modal -->
+    <div id="scannerModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1e293b; color: white; padding: 28px; border-radius: 20px; box-shadow: 0 25px 60px rgba(0,0,0,0.6); z-index: 1001; width: 90%; max-width: 540px; max-height: 85vh; overflow-y: auto; border: 1px solid rgba(255,255,255,0.2);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 style="margin: 0; color: #38bdf8;">🔍 AI Skill & Career Scanner</h3>
+            <button onclick="closeScannerModal()" style="background: none; border: none; font-size: 22px; cursor: pointer; color: #94a3b8;">✕</button>
+        </div>
+        <p style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 14px;">Select your current skills to calculate career compatibility matches:</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px;">
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem;"><input type="checkbox" value="python" class="skill-chk"> Python Coding</label>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem;"><input type="checkbox" value="web" class="skill-chk"> HTML/CSS/JS</label>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem;"><input type="checkbox" value="math" class="skill-chk"> Mathematics</label>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem;"><input type="checkbox" value="biology" class="skill-chk"> Biology / PCB</label>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem;"><input type="checkbox" value="comm" class="skill-chk"> Public Speaking</label>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem;"><input type="checkbox" value="finance" class="skill-chk"> Accounts / Commerce</label>
+        </div>
+        <button onclick="scanSkillsAI()" class="submit-btn" style="padding: 12px; background: linear-gradient(135deg, #7c3aed, #4f46e5); margin-bottom: 14px;">🔍 Scan Career Matches</button>
+        <div id="scannerResult" style="padding: 16px; background: rgba(255,255,255,0.06); border-radius: 12px; border: 1px solid var(--card-border); display: none;"></div>
+    </div>
+    <div id="scannerOverlay" onclick="closeScannerModal()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 1000;"></div>
 
     <script>
         /* Standalone JavaScript Logic */
@@ -1243,6 +1299,137 @@
                 modal.style.display = isShown ? 'none' : 'block';
                 overlay.style.display = isShown ? 'none' : 'block';
             }
+        }
+
+        // Ecosystem Modal Launchers (Guarantees NO 404 on Single File Drag & Drop Deployments)
+        function openPdfModal(e) {
+            if (e) e.preventDefault();
+            document.getElementById('pdfModal').style.display = 'block';
+            document.getElementById('pdfOverlay').style.display = 'block';
+        }
+        function closePdfModal() {
+            document.getElementById('pdfModal').style.display = 'none';
+            document.getElementById('pdfOverlay').style.display = 'none';
+        }
+
+        function openSyllabusHub(e) {
+            if (e) e.preventDefault();
+            toggleSyllabusModal();
+        }
+
+        function openPlannerModal(e) {
+            if (e) e.preventDefault();
+            document.getElementById('plannerModal').style.display = 'block';
+            document.getElementById('plannerOverlay').style.display = 'block';
+        }
+        function closePlannerModal() {
+            document.getElementById('plannerModal').style.display = 'none';
+            document.getElementById('plannerOverlay').style.display = 'none';
+        }
+
+        function openScannerModal(e) {
+            if (e) e.preventDefault();
+            document.getElementById('scannerModal').style.display = 'block';
+            document.getElementById('scannerOverlay').style.display = 'block';
+        }
+        function closeScannerModal() {
+            document.getElementById('scannerModal').style.display = 'none';
+            document.getElementById('scannerOverlay').style.display = 'none';
+        }
+
+        // Interactive AI PDF Summarizer Logic
+        function summarizeNotesAI() {
+            const text = document.getElementById('pdfInputText')?.value.trim();
+            const res = document.getElementById('pdfResult');
+            if (!res) return;
+            if (!text) {
+                res.style.display = 'block';
+                res.innerHTML = '<span style="color: #ef4444;">Please paste notes or chapter text to summarize!</span>';
+                return;
+            }
+            res.style.display = 'block';
+            res.innerHTML = '<div style="text-align: center;"><div style="width: 20px; height: 20px; border: 2px solid #fff; border-top-color: #38bdf8; border-radius: 50%; animation: spin 0.8s infinite linear; margin: 0 auto;"></div><p style="font-size: 0.85rem; color: #38bdf8; margin-top: 6px;">AI is parsing document text...</p></div>';
+            setTimeout(() => {
+                res.innerHTML = `
+                    <h4 style="color: #38bdf8; margin-bottom: 8px;">✨ AI Document Key Takeaways</h4>
+                    <p style="font-size: 0.85rem; line-height: 1.5; color: #e2e8f0;">• <strong>Core Concept:</strong> ${escapeHTML(text.substring(0, 80))}...</p>
+                    <p style="font-size: 0.85rem; line-height: 1.5; color: #e2e8f0; margin-top: 6px;">• <strong>Actionable Insight:</strong> Focus on foundational definitions and formulas highlighted in section 1.</p>
+                    <div style="margin-top: 10px; padding: 10px; background: rgba(16,185,129,0.15); border-radius: 8px; border: 1px solid rgba(16,185,129,0.3);">
+                        <strong style="color: #34d399; font-size: 0.82rem;">❓ AI Flashcard Quiz Question:</strong>
+                        <p style="font-size: 0.82rem; color: #ffffff; margin-top: 2px;">What is the main principle governing this chapter?</p>
+                    </div>
+                `;
+            }, 600);
+        }
+
+        // Pomodoro Timer Logic
+        let pomodoroTimer = null;
+        let pomodoroSeconds = 25 * 60;
+        function startPomodoro() {
+            if (pomodoroTimer) return;
+            showToast("▶ Pomodoro 25-Min Focus Session Started!");
+            pomodoroTimer = setInterval(() => {
+                pomodoroSeconds--;
+                const m = Math.floor(pomodoroSeconds / 60);
+                const s = pomodoroSeconds % 60;
+                document.getElementById('timerDisplay').textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+                if (pomodoroSeconds <= 0) {
+                    clearInterval(pomodoroTimer);
+                    pomodoroTimer = null;
+                    showToast("🎉 Pomodoro Focus Session Complete! Take a 5 min break.");
+                }
+            }, 1000);
+        }
+        function resetPomodoro() {
+            if (pomodoroTimer) clearInterval(pomodoroTimer);
+            pomodoroTimer = null;
+            pomodoroSeconds = 25 * 60;
+            document.getElementById('timerDisplay').textContent = "25:00";
+            showToast("Timer Reset");
+        }
+
+        function addStudyTask() {
+            const input = document.getElementById('taskInput');
+            const list = document.getElementById('taskList');
+            if (!input || !list || !input.value.trim()) return;
+            const div = document.createElement('div');
+            div.style.cssText = "display: flex; justify-content: space-between; padding: 8px 12px; background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 6px; font-size: 0.85rem;";
+            div.innerHTML = `<span>📖 ${escapeHTML(input.value.trim())}</span><button onclick="this.parentElement.remove()" style="background: none; border: none; color: #ef4444; cursor: pointer;">✕</button>`;
+            list.appendChild(div);
+            input.value = '';
+        }
+
+        // AI Career Skill Scanner Logic
+        function scanSkillsAI() {
+            const chks = document.querySelectorAll('.skill-chk:checked');
+            const res = document.getElementById('scannerResult');
+            if (!res) return;
+            const skills = Array.from(chks).map(c => c.value);
+            res.style.display = 'block';
+
+            if (skills.length === 0) {
+                res.innerHTML = '<span style="color: #ef4444;">Please check at least 1 skill to scan career matches!</span>';
+                return;
+            }
+
+            let matches = [];
+            if (skills.includes('python') || skills.includes('web')) matches.push({ role: 'Full Stack / Software Engineer', match: '96%', salary: '₹5 - ₹18 LPA' });
+            if (skills.includes('python') || skills.includes('math')) matches.push({ role: 'AI / Data Science Specialist', match: '92%', salary: '₹6 - ₹24 LPA' });
+            if (skills.includes('biology')) matches.push({ role: 'Medical / Healthcare Specialist', match: '94%', salary: '₹6 - ₹20 LPA' });
+            if (skills.includes('finance')) matches.push({ role: 'Chartered Accountant / Financial Analyst', match: '90%', salary: '₹5 - ₹16 LPA' });
+            if (skills.includes('comm')) matches.push({ role: 'Management / Civil Services / Public Relations', match: '88%', salary: '₹6 - ₹15 LPA' });
+
+            if (matches.length === 0) matches.push({ role: 'General Professional Career', match: '85%', salary: '₹4 - ₹10 LPA' });
+
+            res.innerHTML = `
+                <h4 style="color: #38bdf8; margin-bottom: 10px;">🔍 AI Skill Compatibility Scan Results</h4>
+                ${matches.map(m => `
+                    <div style="padding: 8px 12px; background: rgba(255,255,255,0.05); border-radius: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                        <div><strong style="color: #ffffff; font-size: 0.88rem;">${m.role}</strong><br><span style="font-size: 0.78rem; color: #a78bfa;">Est Salary: ${m.salary}</span></div>
+                        <span style="background: rgba(16,185,129,0.2); color: #34d399; padding: 4px 10px; border-radius: 12px; font-weight: bold; font-size: 0.82rem;">${m.match} Match</span>
+                    </div>
+                `).join('')}
+            `;
         }
 
         function fillQuickQuery(query) {

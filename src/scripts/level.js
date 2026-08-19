@@ -505,6 +505,72 @@ function resetForm() {
     if (resultsSec) resultsSec.style.display = 'none';
 }
 
+// Ecosystem Modal Launchers (Guarantees NO 404 on Single File Drag & Drop Deployments)
+function openPdfModal(e) {
+    if (e) e.preventDefault();
+    const modal = document.getElementById('pdfModal');
+    const overlay = document.getElementById('pdfOverlay');
+    if (modal && overlay) {
+        modal.style.display = 'block';
+        overlay.style.display = 'block';
+    } else {
+        window.open('Chat_Model.html', '_blank');
+    }
+}
+function closePdfModal() {
+    const modal = document.getElementById('pdfModal');
+    const overlay = document.getElementById('pdfOverlay');
+    if (modal && overlay) {
+        modal.style.display = 'none';
+        overlay.style.display = 'none';
+    }
+}
+
+function openSyllabusHub(e) {
+    if (e) e.preventDefault();
+    toggleSyllabusModal();
+}
+
+function openPlannerModal(e) {
+    if (e) e.preventDefault();
+    const modal = document.getElementById('plannerModal');
+    const overlay = document.getElementById('plannerOverlay');
+    if (modal && overlay) {
+        modal.style.display = 'block';
+        overlay.style.display = 'block';
+    } else {
+        window.open('Time_Table.html', '_blank');
+    }
+}
+function closePlannerModal() {
+    const modal = document.getElementById('plannerModal');
+    const overlay = document.getElementById('plannerOverlay');
+    if (modal && overlay) {
+        modal.style.display = 'none';
+        overlay.style.display = 'none';
+    }
+}
+
+function openScannerModal(e) {
+    if (e) e.preventDefault();
+    const modal = document.getElementById('scannerModal');
+    const overlay = document.getElementById('scannerOverlay');
+    if (modal && overlay) {
+        modal.style.display = 'block';
+        overlay.style.display = 'block';
+    } else {
+        window.open('Detect.html', '_blank');
+    }
+}
+function closeScannerModal() {
+    const modal = document.getElementById('scannerModal');
+    const overlay = document.getElementById('scannerOverlay');
+    if (modal && overlay) {
+        modal.style.display = 'none';
+        overlay.style.display = 'none';
+    }
+}
+
 // Quick Syllabus Widget Modal Handlers with Animated Fetching & Rich Data
 function toggleSyllabusModal() {
     const modal = document.getElementById('syllabusModal');
