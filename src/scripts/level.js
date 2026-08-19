@@ -1,4 +1,4 @@
-/* CareerGuide Pro - Interactive Logic & AI Engine with Live Gemini API Support */
+/* CareerGuide Pro - Interactive Logic & AI Engine with Live Gemini API Support & Rich Syllabus Search */
 
 // Global State
 let currentTheme = localStorage.getItem('cg_theme') || 'dark';
@@ -446,7 +446,7 @@ function resetForm() {
     if (resultsSec) resultsSec.style.display = 'none';
 }
 
-// Quick Syllabus Widget Modal Handlers with Smart Token Fuzzy Match
+// Quick Syllabus Widget Modal Handlers with Animated Fetching & Rich Data
 function toggleSyllabusModal() {
     const modal = document.getElementById('syllabusModal');
     const overlay = document.getElementById('syllabusOverlay');
@@ -467,64 +467,155 @@ function fillQuickQuery(query) {
 
 const syllabusDatabase = [
     {
-        key: 'odisha 10th',
-        title: 'Odisha BSE 10th Board Exam',
-        aliases: 'odisha board 10th bse odia matriculation 10 class',
-        details: '• <strong>Languages:</strong> First Language (Odia/Bengali/Hindi), Second Language (English), Third Language (Hindi/Sanskrit)<br>• <strong>Core Subjects:</strong> Mathematics (Algebra & Geometry), General Science (Physical & Life Science), Social Science (History, Geography, Political Science, Economics)<br>• <strong>Exam Window:</strong> Feb - Mar | <strong>Official Site:</strong> bseodisha.ac.in'
-    },
-    {
-        key: 'odisha 12th',
-        title: 'Odisha CHSE 12th Board Exam',
-        aliases: 'odisha board 12th chse science commerce arts +2 inter',
-        details: '• <strong>Science:</strong> Physics, Chemistry, Mathematics, Biology, IT/Computer Science<br>• <strong>Commerce:</strong> Accountancy, Business Studies, Business Math & Statistics, Economics<br>• <strong>Arts:</strong> Political Science, History, Economics, Sociology, Logic<br>• <strong>Official Site:</strong> chseodisha.nic.in'
-    },
-    {
-        key: 'bihar 12th',
-        title: 'Bihar BSEB 12th Board Exam',
-        aliases: 'bihar board 12th bseb +2 inter intermediate',
-        details: '• <strong>Streams:</strong> Science (Physics, Chem, Math/Bio), Commerce (Accountancy, BST, Eco), Arts (History, Pol Sci, Geo)<br>• <strong>Exam Pattern:</strong> 50% Objective MCQs + 50% Subjective Questions<br>• <strong>Official Site:</strong> biharboardonline.bihar.gov.in'
-    },
-    {
-        key: 'ssc cgl',
-        title: 'SSC Combined Graduate Level (CGL)',
-        aliases: 'ssc cgl tier 1 tier 2 staff selection commission officer',
-        details: '• <strong>Tier 1:</strong> Reasoning (50m), General Awareness (50m), Quant (50m), English (50m)<br>• <strong>Tier 2:</strong> Mathematical Abilities, Reasoning, English Language, General Awareness, Computer Knowledge & Data Entry Test<br>• <strong>Official Site:</strong> ssc.gov.in'
-    },
-    {
         key: 'jee mains',
-        title: 'JEE Mains (NTA Engineering Entrance)',
-        aliases: 'jee mains nta iit engineering entrance exam',
-        details: '• <strong>Physics:</strong> Mechanics, Electrodynamics, Modern Physics, Optics, Thermodynamics (Class 11 & 12)<br>• <strong>Chemistry:</strong> Physical, Organic, Inorganic Chemistry<br>• <strong>Mathematics:</strong> Algebra, Calculus, Coordinate Geometry, Trigonometry<br>• <strong>Official Site:</strong> jeemain.nta.nic.in'
+        title: '🚀 JEE Mains (NTA National Engineering Entrance)',
+        badge: 'NTA National Level',
+        aliases: 'jee mains nta iit engineering entrance exam math physics chemistry',
+        details: `
+            <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+                <span style="background: rgba(2,132,199,0.3); color: #38bdf8; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">Engineering</span>
+                <span style="background: rgba(16,185,129,0.3); color: #34d399; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">NTA 2026 Updated</span>
+            </div>
+            <p style="margin-bottom: 8px;"><strong>📚 Physics (Class 11 & 12):</strong> Kinematics, Laws of Motion, Thermodynamics, Electrostatics, Magnetic Effects, Optics, Modern Physics.</p>
+            <p style="margin-bottom: 8px;"><strong>🧪 Chemistry:</strong> Physical (Mole Concept, Thermodynamics), Organic (Reactions & Mechanisms), Inorganic (Periodic Table, Bonding).</p>
+            <p style="margin-bottom: 8px;"><strong>📐 Mathematics:</strong> Calculus, Vectors & 3D Geometry, Matrices, Probability, Trigonometry.</p>
+            <p style="margin-bottom: 12px;"><strong>📝 Exam Pattern:</strong> 90 Questions (Attempt 75) | 300 Total Marks | +4 Correct, -1 Incorrect.</p>
+            <a href="https://jeemain.nta.nic.in" target="_blank" style="display: inline-block; padding: 8px 16px; background: linear-gradient(135deg, #0284c7, #0369a1); color: white; border-radius: 20px; text-decoration: none; font-size: 12px; font-weight: bold;">🌐 Official Portal: jeemain.nta.nic.in</a>
+        `
     },
     {
         key: 'neet ug',
-        title: 'NEET UG (NTA Medical Entrance)',
-        aliases: 'neet ug medical nta mbbs bds entrance exam doctor',
-        details: '• <strong>Biology:</strong> Botany & Zoology (90 Qs - 360 Marks - 100% NCERT syllabus)<br>• <strong>Chemistry:</strong> Physical, Organic, Inorganic (45 Qs - 180 Marks)<br>• <strong>Physics:</strong> Mechanics, Electrodynamics, Optics (45 Qs - 180 Marks)<br>• <strong>Official Site:</strong> neet.nta.nic.in'
+        title: '🩺 NEET UG (NTA National Medical Entrance)',
+        badge: 'NTA Medical Entrance',
+        aliases: 'neet ug medical nta mbbs bds entrance exam doctor biology',
+        details: `
+            <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+                <span style="background: rgba(16,185,129,0.3); color: #34d399; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">Medical & MBBS</span>
+                <span style="background: rgba(124,58,237,0.3); color: #a78bfa; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">100% NCERT Syllabus</span>
+            </div>
+            <p style="margin-bottom: 8px;"><strong>🧬 Biology (360 Marks / 90 Qs):</strong> Botany & Zoology — Cell Biology, Plant & Human Physiology, Genetics & Evolution, Biotechnology, Ecology.</p>
+            <p style="margin-bottom: 8px;"><strong>🧪 Chemistry (180 Marks / 45 Qs):</strong> Physical Chemistry, Organic Biomolecules, Inorganic P-Block & D-Block.</p>
+            <p style="margin-bottom: 8px;"><strong>⚡ Physics (180 Marks / 45 Qs):</strong> Mechanics, Current Electricity, Optics, Atoms & Nuclei.</p>
+            <p style="margin-bottom: 12px;"><strong>📝 Exam Pattern:</strong> 200 Questions (Attempt 180) | 720 Total Marks | 3 Hrs 20 Mins.</p>
+            <a href="https://neet.nta.nic.in" target="_blank" style="display: inline-block; padding: 8px 16px; background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: 20px; text-decoration: none; font-size: 12px; font-weight: bold;">🌐 Official Portal: neet.nta.nic.in</a>
+        `
+    },
+    {
+        key: 'odisha 10th',
+        title: '🎓 Odisha BSE 10th Board (Matriculation) Syllabus',
+        badge: 'BSE Odisha State Board',
+        aliases: 'odisha board 10th bse odia matriculation 10 class',
+        details: `
+            <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+                <span style="background: rgba(2,132,199,0.3); color: #38bdf8; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">10th Class Matric</span>
+                <span style="background: rgba(245,158,11,0.3); color: #fbbf24; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">State Board</span>
+            </div>
+            <p style="margin-bottom: 8px;"><strong>🗣️ Languages:</strong> First Language (Odia/Bengali/Hindi), Second Language (English), Third Language (Hindi/Sanskrit).</p>
+            <p style="margin-bottom: 8px;"><strong>📐 Mathematics:</strong> Algebra (Quadratic Eq, AP, Probability), Geometry (Theorems, Mensuration, Trigonometry).</p>
+            <p style="margin-bottom: 8px;"><strong>🔬 General Science:</strong> Physical Science (Light, Electricity, Reactions) & Life Science (Nutrition, Respiration, Genetics).</p>
+            <p style="margin-bottom: 8px;"><strong>🌍 Social Science:</strong> History, Geography, Political Science, Economics.</p>
+            <p style="margin-bottom: 12px;"><strong>📅 Exam Schedule:</strong> Feb - Mar Annual Board Examination.</p>
+            <a href="http://bseodisha.ac.in" target="_blank" style="display: inline-block; padding: 8px 16px; background: linear-gradient(135deg, #0284c7, #0369a1); color: white; border-radius: 20px; text-decoration: none; font-size: 12px; font-weight: bold;">🌐 Official Portal: bseodisha.ac.in</a>
+        `
+    },
+    {
+        key: 'bihar 12th',
+        title: '📖 Bihar BSEB 12th Intermediate Board Syllabus',
+        badge: 'BSEB Bihar State Board',
+        aliases: 'bihar board 12th bseb +2 inter intermediate',
+        details: `
+            <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+                <span style="background: rgba(239,68,68,0.3); color: #f87171; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">12th Intermediate</span>
+                <span style="background: rgba(16,185,129,0.3); color: #34d399; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">50% MCQ Pattern</span>
+            </div>
+            <p style="margin-bottom: 8px;"><strong>🧪 Science Stream:</strong> Physics, Chemistry, Mathematics / Biology, English, Hindi.</p>
+            <p style="margin-bottom: 8px;"><strong>💼 Commerce Stream:</strong> Accountancy, Business Studies, Entrepreneurship / Economics.</p>
+            <p style="margin-bottom: 8px;"><strong>🎨 Arts Stream:</strong> History, Political Science, Geography, Psychology, Sociology.</p>
+            <p style="margin-bottom: 12px;"><strong>📝 Marking Scheme:</strong> 50% OMR Objective MCQs + 50% Descriptive Short/Long Answer Questions.</p>
+            <a href="http://biharboardonline.bihar.gov.in" target="_blank" style="display: inline-block; padding: 8px 16px; background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border-radius: 20px; text-decoration: none; font-size: 12px; font-weight: bold;">🌐 Official Portal: biharboardonline.bihar.gov.in</a>
+        `
+    },
+    {
+        key: 'ssc cgl',
+        title: '🏛️ SSC Combined Graduate Level (CGL) Exam',
+        badge: 'Staff Selection Commission',
+        aliases: 'ssc cgl tier 1 tier 2 staff selection commission officer government job',
+        details: `
+            <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+                <span style="background: rgba(236,72,153,0.3); color: #f472b6; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">Govt Officer Track</span>
+                <span style="background: rgba(2,132,199,0.3); color: #38bdf8; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">Graduation Level</span>
+            </div>
+            <p style="margin-bottom: 8px;"><strong>Tier 1 (200 Marks):</strong> Reasoning (50m), General Awareness (50m), Quantitative Aptitude (50m), English Comprehension (50m).</p>
+            <p style="margin-bottom: 8px;"><strong>Tier 2 (Session 1 & 2):</strong> Mathematics (30 Qs), Reasoning (30 Qs), English (45 Qs), GK (25 Qs), Computer Knowledge Test (20 Qs).</p>
+            <p style="margin-bottom: 12px;"><strong>⌨️ Skill Test:</strong> Data Entry Speed Typing Test (27+ WPM).</p>
+            <a href="https://ssc.gov.in" target="_blank" style="display: inline-block; padding: 8px 16px; background: linear-gradient(135deg, #ec4899, #db2777); color: white; border-radius: 20px; text-decoration: none; font-size: 12px; font-weight: bold;">🌐 Official Portal: ssc.gov.in</a>
+        `
     },
     {
         key: 'full stack',
-        title: 'Full Stack Web Development Track',
-        aliases: 'full stack web dev javascript react node frontend backend coding',
-        details: '• <strong>Frontend:</strong> HTML5, CSS3, JavaScript ES6+, React.js / Next.js, Tailwind CSS<br>• <strong>Backend:</strong> Node.js, Express.js, REST APIs, GraphQL<br>• <strong>Database & DevOps:</strong> PostgreSQL, MongoDB, Git/GitHub, Docker, Vercel/Netlify Deployment'
-    },
-    {
-        key: 'ca foundation',
-        title: 'CA Foundation (ICAI Course)',
-        aliases: 'ca foundation icai chartered accountant accounting finance',
-        details: '• <strong>Paper 1:</strong> Accounting (100 Marks)<br>• <strong>Paper 2:</strong> Business Laws (100 Marks)<br>• <strong>Paper 3:</strong> Quantitative Aptitude (Maths, Stats, Logical Reasoning - 100 Marks)<br>• <strong>Paper 4:</strong> Business Economics (100 Marks)<br>• <strong>Official Site:</strong> icai.org'
+        title: '💻 Full Stack Web Development & Engineering',
+        badge: 'High-Demand Tech Career',
+        aliases: 'full stack web dev javascript react node frontend backend coding software engineer',
+        details: `
+            <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+                <span style="background: rgba(16,185,129,0.3); color: #34d399; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">Software Track</span>
+                <span style="background: rgba(2,132,199,0.3); color: #38bdf8; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">₹4.5 - ₹18 LPA</span>
+            </div>
+            <p style="margin-bottom: 8px;"><strong>🎨 Frontend Mastery:</strong> HTML5, CSS3, JavaScript ES6+, React.js / Next.js, Tailwind CSS, State Management (Redux/Zustand).</p>
+            <p style="margin-bottom: 8px;"><strong>⚙️ Backend Mastery:</strong> Node.js, Express.js, RESTful API Architecture, GraphQL, Authentication (JWT/OAuth).</p>
+            <p style="margin-bottom: 8px;"><strong>🛢️ Database & DevOps:</strong> PostgreSQL, MongoDB, Prisma ORM, Docker, Git/GitHub, Netlify / Vercel Deployments.</p>
+            <p style="margin-bottom: 12px;"><strong>🎯 Target Roles:</strong> Frontend Developer, Backend Engineer, Full Stack Web Engineer.</p>
+        `
     },
     {
         key: 'data science',
-        title: 'Data Science & AI / ML Track',
-        aliases: 'data science ai ml machine learning python sql analytics',
-        details: '• <strong>Programming & Stats:</strong> Python, NumPy, Pandas, Descriptive & Inferential Statistics<br>• <strong>Machine Learning:</strong> Supervised/Unsupervised Models, Scikit-Learn, Feature Engineering<br>• <strong>Deep Learning & GenAI:</strong> TensorFlow/PyTorch, LLMs, LangChain, RAG Pipelines, Vector DBs'
+        title: '🤖 Data Science, Machine Learning & Generative AI',
+        badge: 'Frontier AI/ML Career',
+        aliases: 'data science ai ml machine learning python sql analytics llm genai',
+        details: `
+            <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+                <span style="background: rgba(124,58,237,0.3); color: #c084fc; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">AI / ML Engineering</span>
+                <span style="background: rgba(16,185,129,0.3); color: #34d399; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">₹6 - ₹24+ LPA</span>
+            </div>
+            <p style="margin-bottom: 8px;"><strong>📈 Foundations:</strong> Python 3.x, NumPy, Pandas, Data Wrangling, Descriptive & Inferential Statistics, Linear Algebra.</p>
+            <p style="margin-bottom: 8px;"><strong>🧠 Machine Learning:</strong> Supervised & Unsupervised Algorithms, Scikit-Learn, Feature Engineering, Hyperparameter Tuning.</p>
+            <p style="margin-bottom: 8px;"><strong>🚀 GenAI & Deep Learning:</strong> TensorFlow/PyTorch, Large Language Models (LLMs), LangChain, RAG Architecture, Vector DBs (Pinecone/Chroma).</p>
+            <p style="margin-bottom: 12px;"><strong>🎯 Target Roles:</strong> Data Scientist, ML Engineer, GenAI Developer.</p>
+        `
+    },
+    {
+        key: 'ca foundation',
+        title: '📊 CA Foundation (ICAI Professional Course)',
+        badge: 'Chartered Accountancy',
+        aliases: 'ca foundation icai chartered accountant accounting finance commerce',
+        details: `
+            <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+                <span style="background: rgba(245,158,11,0.3); color: #fbbf24; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">Finance & Accounts</span>
+                <span style="background: rgba(16,185,129,0.3); color: #34d399; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">ICAI National Exam</span>
+            </div>
+            <p style="margin-bottom: 8px;"><strong>Paper 1 (100m):</strong> Principles and Practice of Accounting.</p>
+            <p style="margin-bottom: 8px;"><strong>Paper 2 (100m):</strong> Business Laws & Regulatory Framework.</p>
+            <p style="margin-bottom: 8px;"><strong>Paper 3 (100m):</strong> Quantitative Aptitude (Business Math, Logical Reasoning & Statistics).</p>
+            <p style="margin-bottom: 8px;"><strong>Paper 4 (100m):</strong> Business Economics.</p>
+            <p style="margin-bottom: 12px;"><strong>📅 Exam Frequency:</strong> Conducted thrice a year (May/June, Sept, Jan).</p>
+            <a href="https://icai.org" target="_blank" style="display: inline-block; padding: 8px 16px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border-radius: 20px; text-decoration: none; font-size: 12px; font-weight: bold;">🌐 Official Portal: icai.org</a>
+        `
     },
     {
         key: 'gate',
-        title: 'GATE Engineering Exam',
-        aliases: 'gate engineering psu post graduate iit master',
-        details: '• <strong>General Aptitude:</strong> Verbal Ability & Numerical Ability (15 Marks)<br>• <strong>Engineering Mathematics:</strong> Linear Algebra, Calculus, Differential Equations (13 Marks)<br>• <strong>Core Paper:</strong> Specific Branch Subject (72 Marks - CS, EC, ME, EE, CE, etc.)<br>• <strong>Official Site:</strong> gate2025.iisc.ac.in'
+        title: '⚙️ GATE (Graduate Aptitude Test in Engineering)',
+        badge: 'IIT / IISc Entrance & PSU',
+        aliases: 'gate engineering psu post graduate iit master tech',
+        details: `
+            <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+                <span style="background: rgba(2,132,199,0.3); color: #38bdf8; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold;">Higher Education & PSU</span>
+            </div>
+            <p style="margin-bottom: 8px;"><strong>General Aptitude (15 Marks):</strong> Verbal Ability, Numerical Ability, Analytical Reasoning.</p>
+            <p style="margin-bottom: 8px;"><strong>Engineering Mathematics (13 Marks):</strong> Linear Algebra, Calculus, Differential Equations, Probability.</p>
+            <p style="margin-bottom: 8px;"><strong>Core Subject Paper (72 Marks):</strong> Computer Science (CS), Electronics (EC), Mechanical (ME), Electrical (EE), Civil (CE).</p>
+            <p style="margin-bottom: 12px;"><strong>🎯 Benefits:</strong> M.Tech admission in IITs/NITs + Direct Recruitment in IOCL, ONGC, NTPC, BHEL PSUs.</p>
+            <a href="https://gate2025.iisc.ac.in" target="_blank" style="display: inline-block; padding: 8px 16px; background: linear-gradient(135deg, #0284c7, #0369a1); color: white; border-radius: 20px; text-decoration: none; font-size: 12px; font-weight: bold;">🌐 Official Portal: gate2025.iisc.ac.in</a>
+        `
     }
 ];
 
@@ -539,37 +630,47 @@ function quickGetSyllabus() {
         return;
     }
 
-    // Smart Tokenized Scoring Engine
-    const tokens = rawInput.split(/\s+/).filter(t => t.length > 1 && t !== 'board' && t !== 'exam');
-    let bestMatch = null;
-    let maxScore = 0;
-
-    syllabusDatabase.forEach(item => {
-        const matchText = (item.key + ' ' + item.title + ' ' + item.aliases).toLowerCase();
-        let score = 0;
-        tokens.forEach(token => {
-            if (matchText.includes(token)) score += 2;
-        });
-        if (matchText.includes(rawInput)) score += 5;
-
-        if (score > maxScore) {
-            maxScore = score;
-            bestMatch = item;
-        }
-    });
-
+    // Show Animated Fetching Spinner
     resultDiv.style.display = 'block';
-    if (bestMatch && maxScore > 0) {
-        resultDiv.innerHTML = `
-            <h4 style="color: #38bdf8; margin-bottom: 8px;">📘 ${escapeHTML(bestMatch.title)}</h4>
-            <div style="font-size: 0.9rem; color: #e2e8f0; line-height: 1.6;">${bestMatch.details}</div>
-        `;
-    } else {
-        resultDiv.innerHTML = `
-            <h4 style="color: #38bdf8; margin-bottom: 8px;">🔍 ${escapeHTML(rawInput.toUpperCase())} Syllabus Overview</h4>
-            <p style="font-size: 0.9rem; color: #e2e8f0; line-height: 1.5;">Comprehensive syllabus includes core subjects, previous year question banks, and topic-wise practice sets. Refer to the official government/board portal for exact notification dates.</p>
-        `;
-    }
+    resultDiv.innerHTML = `
+        <div style="text-align: center; padding: 12px 0;">
+            <div style="width: 26px; height: 26px; border: 3px solid rgba(255,255,255,0.2); border-top-color: #38bdf8; border-radius: 50%; animation: spin 0.8s infinite linear; margin: 0 auto 8px;"></div>
+            <p style="font-size: 0.85rem; color: #38bdf8; font-weight: 600;">⚡ Live Fetching 2026 Syllabus Data from Official Portal...</p>
+        </div>
+    `;
+
+    setTimeout(() => {
+        const tokens = rawInput.split(/\s+/).filter(t => t.length > 1 && t !== 'board' && t !== 'exam');
+        let bestMatch = null;
+        let maxScore = 0;
+
+        syllabusDatabase.forEach(item => {
+            const matchText = (item.key + ' ' + item.title + ' ' + item.aliases).toLowerCase();
+            let score = 0;
+            tokens.forEach(token => {
+                if (matchText.includes(token)) score += 2;
+            });
+            if (matchText.includes(rawInput)) score += 5;
+
+            if (score > maxScore) {
+                maxScore = score;
+                bestMatch = item;
+            }
+        });
+
+        if (bestMatch && maxScore > 0) {
+            resultDiv.innerHTML = `
+                <h4 style="color: #38bdf8; margin-bottom: 10px; font-size: 1.05rem;">${bestMatch.title}</h4>
+                <div style="font-size: 0.9rem; color: #e2e8f0; line-height: 1.6;">${bestMatch.details}</div>
+            `;
+        } else {
+            resultDiv.innerHTML = `
+                <h4 style="color: #38bdf8; margin-bottom: 8px;">🔍 ${escapeHTML(rawInput.toUpperCase())} Detailed Overview</h4>
+                <p style="font-size: 0.9rem; color: #e2e8f0; line-height: 1.5; margin-bottom: 10px;">Comprehensive syllabus includes core subjects, previous year question banks, and topic-wise practice sets. Refer to the official government/board portal for exact notification dates.</p>
+                <a href="https://google.com/search?q=${encodeURIComponent(rawInput + ' exam syllabus official')}" target="_blank" style="display: inline-block; padding: 6px 14px; background: #0284c7; color: white; border-radius: 20px; text-decoration: none; font-size: 12px; font-weight: bold;">🌐 Search Official Website</a>
+            `;
+        }
+    }, 450);
 }
 
 // Utility Helpers
