@@ -360,7 +360,7 @@
 
         .salary-item {
             display: flex;
-            justify-content: between;
+            justify-content: space-between;
             margin-bottom: 8px;
             padding: 8px 12px;
             background: var(--salary-bg);
@@ -569,6 +569,71 @@
             transform: scale(1.05);
         }
 
+        .info-box {
+            background: var(--content-bg);
+            color: var(--content-text);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 20px 0;
+            border: 1px solid var(--card-border);
+        }
+
+        .info-title {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--section-title);
+        }
+
+        .info-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .info-list li {
+            display: flex;
+            gap: 8px;
+            margin: 6px 0;
+        }
+
+        .info-bullet {
+            color: var(--section-title);
+            font-weight: bold;
+            min-width: 18px;
+        }
+
+        .info-note {
+            margin-top: 10px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .form-help {
+            margin-top: 6px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 10px 12px;
+        }
+
+        .toggle-row input {
+            width: 18px;
+            height: 18px;
+        }
+
+        .toggle-row span {
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
         /* Stream and Branch Fields */
         .stream-branch-container {
             display: none;
@@ -630,7 +695,7 @@
 
     <!-- Language Toggle -->
     <div class="language-toggle" id="languageToggle">
-        🌐 English
+        🌐 UI: English
     </div>
 
     <div class="container">
@@ -659,39 +724,68 @@
                 </div>
             </div>
 
+            <div class="info-box" id="helpBox">
+                <div class="info-title" id="helpTitle">Simple Steps (3)</div>
+                <ul class="info-list">
+                    <li><span class="info-bullet">1.</span><span id="helpStep1">Fill your name and last class passed.</span></li>
+                    <li><span class="info-bullet">2.</span><span id="helpStep2">Choose language and stream (if 12th).</span></li>
+                    <li><span class="info-bullet">3.</span><span id="helpStep3">Write your goal: teacher, police, nurse.</span></li>
+                </ul>
+                <div class="info-note" id="helpNote">Need very easy words" Turn on "Easy Language Mode".</div>
+            </div>
+
             <form id="careerForm">
                 <div class="form-group">
-                    <label class="form-label">👤 Your Name</label>
+                    <label class="form-label" id="nameLabel">Your Name</label>
                     <input type="text" class="form-input" id="studentName" placeholder="Enter your name" required>
+                    <p class="form-help" id="helpName">Example: Aman, Pooja</p>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">📚 Current Qualification</label>
+                    <label class="form-label" id="qualificationLabel">Last Class / Qualification</label>
                     <select class="form-select" id="qualification" required>
-                        <option value="">Select qualification</option>
+                        <option value="">Select your last class</option>
                         <option value="10th">10th Pass/Appearing</option>
                         <option value="12th">12th Pass/Appearing</option>
                         <option value="diploma">Diploma</option>
                         <option value="bachelor">Bachelor's Degree</option>
                         <option value="master">Master's Degree</option>
                     </select>
+                    <p class="form-help" id="helpQualification">Choose the last class you passed or are studying now.</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" id="guidanceLanguageLabel">Guidance Language</label>
+                    <select class="form-select" id="guidanceLanguage"></select>
+                    <p class="form-help" id="helpGuidanceLanguage">Result will appear in this language.</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" id="simpleModeLabel">Easy Language Mode</label>
+                    <div class="toggle-row">
+                        <input type="checkbox" id="simpleMode">
+                        <span id="simpleModeText">Use very simple words (best for rural students).</span>
+                    </div>
                 </div>
 
                 <!-- Stream Field (for 12th students) -->
                 <div class="form-group" id="streamField" style="display: none;">
-                    <label class="form-label">🎯 Stream (11th-12th)</label>
+                    <label class="form-label" id="streamLabel">Stream (11th-12th)</label>
                     <select class="form-select" id="stream">
+                        <option value="">Select stream</option>
                         <option value="Science">Science (PCM/PCB)</option>
                         <option value="Commerce">Commerce</option>
                         <option value="Arts">Arts/Humanities</option>
                     </select>
+                    <p class="form-help" id="helpStream">If you are in 12th, choose your stream.</p>
                 </div>
 
                 <!-- Stream and Branch Container (for Bachelor's/Master's) -->
                 <div class="stream-branch-container" id="streamBranchContainer">
                     <div class="form-group">
-                        <label class="form-label">🎓 Stream/Field</label>
+                        <label class="form-label" id="educationStreamLabel">Stream/Field</label>
                         <select class="form-select" id="educationStream">
+                            <option value="">Select field</option>
                             <option value="Science">Science</option>
                             <option value="Commerce">Commerce</option>
                             <option value="Arts">Arts</option>
@@ -704,21 +798,23 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">⚙️ Branch/Specialization</label>
+                        <label class="form-label" id="branchLabel">Branch/Specialization</label>
                         <select class="form-select" id="branch">
                             <!-- Options will be populated based on stream selection -->
-                            <option value="General">Select Stream First</option>
+                            <option value="General">Select field first</option>
                         </select>
+                        <p class="form-help" id="helpBranch">If you are not sure, keep General.</p>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">❤️ Your Interests/Career Goals</label>
-                    <input type="text" class="form-input" id="interests" placeholder="e.g., software engineer, doctor, business, artist, government jobs" required>
+                    <label class="form-label" id="interestsLabel">Your Goal / Interest</label>
+                    <input type="text" class="form-input" id="interests" placeholder="e.g., teacher, police, nurse, business, software engineer" required>
+                    <p class="form-help" id="helpInterests">Write one or two career goals.</p>
                 </div>
 
                 <button type="submit" class="submit-btn" id="submitBtn">
-                    🚀 Get Career Guidance
+                    <span id="submitBtnText">Get Career Guidance</span>
                 </button>
             </form>
 
@@ -744,7 +840,7 @@
 
             <div class="loading" id="loadingSection">
                 <div class="spinner"></div>
-                <p>AI is generating your personalized guidance...</p>
+                <p id="loadingText">AI is generating your personalized guidance...</p>
             </div>
         </div>
 
@@ -788,7 +884,7 @@
 
         <!-- Results Section -->
         <div class="glass-card results" id="resultsSection">
-            <h2 style="color: var(--text-primary); text-align: center; margin-bottom: 20px;">🎯 Your Career Guidance</h2>
+            <h2 id="resultsTitle" style="color: var(--text-primary); text-align: center; margin-bottom: 20px;">Your Career Guidance</h2>
             <div class="guidance-content" id="guidanceContent">
                 <!-- Formatted guidance will appear here -->
             </div>
@@ -805,7 +901,7 @@
             </div>
             
             <button class="submit-btn" onclick="resetForm()" style="margin-top: 20px; background: #667eea;">
-                🔄 Get Another Guidance
+                <span id="resetBtnText">Get Another Guidance</span>
             </button>
         </div>
     </div>
@@ -836,7 +932,7 @@
 
         themeToggle.addEventListener('click', () => {
             const currentTheme = body.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            const newTheme = currentTheme === 'light' " 'dark' : 'light';
             
             body.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
@@ -844,7 +940,7 @@
         });
 
         function updateThemeIcon(theme) {
-            themeIcon.textContent = theme === 'light' ? '🌙' : '☀️';
+            themeIcon.textContent = theme === 'light' " '🌙' : '☀️';
         }
 
         // DOM Elements
@@ -860,6 +956,9 @@
         const submitBtn = document.getElementById('submitBtn');
         const blogRecommendation = document.getElementById('blogRecommendation');
         const languageToggle = document.getElementById('languageToggle');
+        const guidanceLanguage = document.getElementById('guidanceLanguage');
+        const simpleMode = document.getElementById('simpleMode');
+        let lastGuidanceLanguage = 'English';
 
         // Initialize background animation
         createBackgroundDots();
@@ -902,23 +1001,54 @@
             ]
         };
 
+        const guidanceLanguageOptions = [
+            { value: 'English', en: 'English', hi: 'Angrezi' },
+            { value: 'Hindi', en: 'Hindi', hi: 'Hindi' },
+            { value: 'Hinglish', en: 'Hinglish (Easy Hindi)', hi: 'Hinglish (Aasan Hindi)' },
+            { value: 'Bengali', en: 'Bengali', hi: 'Bengali' },
+            { value: 'Marathi', en: 'Marathi', hi: 'Marathi' },
+            { value: 'Tamil', en: 'Tamil', hi: 'Tamil' },
+            { value: 'Telugu', en: 'Telugu', hi: 'Telugu' },
+            { value: 'Urdu', en: 'Urdu', hi: 'Urdu' }
+        ];
+
+
+        function renderGuidanceLanguageOptions() {
+            const selected = guidanceLanguage.value || (currentLanguage === 'hindi' " 'Hindi' : 'English');
+            guidanceLanguage.innerHTML = '';
+            guidanceLanguageOptions.forEach(optionData => {
+                const option = document.createElement('option');
+                option.value = optionData.value;
+                option.textContent = currentLanguage === 'hindi' " optionData.hi : optionData.en;
+                guidanceLanguage.appendChild(option);
+            });
+            guidanceLanguage.value = selected;
+        }
+
+        function populateBranchOptions(selectedStream) {
+            const branchSelect = document.getElementById('branch');
+            branchSelect.innerHTML = '';
+
+            const generalOption = document.createElement('option');
+            generalOption.value = 'General';
+            generalOption.textContent = currentLanguage === 'hindi' ? 'General (pata nahi)' : 'General (Not sure)';
+            branchSelect.appendChild(generalOption);
+
+            if (!selectedStream || !branchOptions[selectedStream]) {
+                return;
+            }
+
+            branchOptions[selectedStream].forEach(branchName => {
+                const option = document.createElement('option');
+                option.value = branchName;
+                option.textContent = branchName;
+                branchSelect.appendChild(option);
+            });
+        }
+
         // Update branch options when stream changes
         educationStream.addEventListener('change', function() {
-            const selectedStream = this.value;
-            const branchSelect = document.getElementById('branch');
-            
-            // Clear existing options
-            branchSelect.innerHTML = '';
-            
-            // Add new options
-            if (branchOptions[selectedStream]) {
-                branchOptions[selectedStream].forEach(branchName => {
-                    const option = document.createElement('option');
-                    option.value = branchName;
-                    option.textContent = branchName;
-                    branchSelect.appendChild(option);
-                });
-            }
+            populateBranchOptions(this.value);
         });
 
         // Qualification change handler
@@ -934,77 +1064,140 @@
                 streamField.style.display = 'block';
             } else if (['diploma', 'bachelor', 'master'].includes(selectedQualification)) {
                 streamBranchContainer.classList.add('show');
+                populateBranchOptions(educationStream.value);
             }
         });
 
         // Language Toggle Functionality
-        let currentLanguage = 'english';
+        let currentLanguage = localStorage.getItem('uiLanguage') || 'english';
+        updateUIForLanguage();
+
         languageToggle.addEventListener('click', () => {
             currentLanguage = currentLanguage === 'english' ? 'hindi' : 'english';
-            languageToggle.textContent = currentLanguage === 'english' ? '🌐 English' : '🌐 हिंदी';
+            localStorage.setItem('uiLanguage', currentLanguage);
             updateUIForLanguage();
         });
 
         function updateUIForLanguage() {
+            renderGuidanceLanguageOptions();
             if (currentLanguage === 'hindi') {
-                document.querySelector('.title').textContent = '🎓 करियरपाथ प्रो';
-                document.querySelector('.subtitle').textContent = 'AI-संचालित करियर मार्गदर्शन + टेक लेख';
-                document.getElementById('studentName').placeholder = 'अपना नाम दर्ज करें';
-                document.getElementById('interests').placeholder = 'जैसे, सॉफ्टवेयर इंजीनियर, डॉक्टर, बिजनेस, कलाकार, सरकारी नौकरी';
-                document.querySelector('.submit-btn').innerHTML = '🚀 करियर मार्गदर्शन प्राप्त करें';
-                
-                // Update qualification options
+                languageToggle.textContent = '?? UI: Hindi';
+                document.querySelector('.title').textContent = 'CareerPath Pro';
+                document.querySelector('.subtitle').textContent = 'AI se career margdarshan + tech lekh';
+                document.getElementById('studentName').placeholder = 'Apna naam likhen';
+                document.getElementById('interests').placeholder = 'Jaise: teacher, police, nurse, kisan, engineer';
+                document.getElementById('submitBtnText').textContent = 'Career margdarshan paayen';
+                document.getElementById('loadingText').textContent = 'AI aapka margdarshan bana raha hai...';
+                document.getElementById('resultsTitle').textContent = 'Aapka career margdarshan';
+                document.getElementById('resetBtnText').textContent = 'Phir se margdarshan len';
+
+                document.getElementById('helpTitle').textContent = 'Saral tareeke (3 kadam)';
+                document.getElementById('helpStep1').textContent = 'Apna naam aur pichhli kaksha likhen.';
+                document.getElementById('helpStep2').textContent = 'Bhasha chune aur (agar 12th) stream chune.';
+                document.getElementById('helpStep3').textContent = 'Apna lakshya likhen: teacher, police, nurse.';
+                document.getElementById('helpNote').textContent = 'Aasan bhasha chahiye? "Easy Language Mode" on karein.';
+
+                document.getElementById('nameLabel').textContent = 'Aapka naam';
+                document.getElementById('helpName').textContent = 'Udaharan: Aman, Pooja';
+                document.getElementById('qualificationLabel').textContent = 'Pichhli kaksha / yogyata';
+                document.getElementById('helpQualification').textContent = 'Jo kaksha pass ki hai ya abhi padh rahe hain.';
+                document.getElementById('guidanceLanguageLabel').textContent = 'Parinaam ki bhasha';
+                document.getElementById('helpGuidanceLanguage').textContent = 'Result isi bhasha me aayega.';
+                document.getElementById('simpleModeLabel').textContent = 'Aasan bhasha mode';
+                document.getElementById('simpleModeText').textContent = 'Bahut aasan shabdon me jawab (rural students ke liye).';
+                document.getElementById('streamLabel').textContent = 'Stream (11th-12th)';
+                document.getElementById('helpStream').textContent = 'Agar 12th me hain, apni stream chune.';
+                document.getElementById('educationStreamLabel').textContent = 'Field / stream';
+                document.getElementById('branchLabel').textContent = 'Branch / vishay';
+                document.getElementById('helpBranch').textContent = 'Agar pata nahi, to General rahne den.';
+                document.getElementById('interestsLabel').textContent = 'Aap kya banna chahte hain?';
+                document.getElementById('helpInterests').textContent = '1-2 lakshya likhen.';
+
                 const qualificationSelect = document.getElementById('qualification');
+                const currentQualification = qualificationSelect.value;
                 qualificationSelect.innerHTML = `
-                    <option value="">शैक्षणिक योग्यता चुनें</option>
-                    <option value="10th">10वीं पास/अध्ययनरत</option>
-                    <option value="12th">12वीं पास/अध्ययनरत</option>
-                    <option value="diploma">डिप्लोमा</option>
-                    <option value="bachelor">स्नातक डिग्री</option>
-                    <option value="master">स्नातकोत्तर डिग्री</option>
+                    <option value="">Apni kaksha chune</option>
+                    <option value="10th">10th pass / padh rahe</option>
+                    <option value="12th">12th pass / padh rahe</option>
+                    <option value="diploma">Diploma</option>
+                    <option value="bachelor">Snatak degree</option>
+                    <option value="master">Snatakottar degree</option>
                 `;
-                
-                // Update stream field label
-                document.querySelector('#streamField .form-label').textContent = '🎯 स्ट्रीम (11वीं-12वीं)';
-                
-                // Update stream options
+                qualificationSelect.value = currentQualification;
+
+                document.querySelector('#streamField .form-label').textContent = 'Stream (11th-12th)';
+
                 const streamSelect = document.getElementById('stream');
+                const currentStream = streamSelect.value;
                 streamSelect.innerHTML = `
-                    <option value="Science">साइंस (PCM/PCB)</option>
-                    <option value="Commerce">कॉमर्स</option>
-                    <option value="Arts">आर्ट्स/मानविकी</option>
+                    <option value="">Stream chune</option>
+                    <option value="Science">Science (PCM/PCB)</option>
+                    <option value="Commerce">Commerce</option>
+                    <option value="Arts">Arts/Humanities</option>
                 `;
-                
+                streamSelect.value = currentStream;
+                populateBranchOptions(educationStream.value);
             } else {
-                document.querySelector('.title').textContent = '🎓 CareerPath Pro';
+                languageToggle.textContent = '?? UI: English';
+                document.querySelector('.title').textContent = 'CareerPath Pro';
                 document.querySelector('.subtitle').textContent = 'AI-Powered Career Guidance + Tech Articles';
                 document.getElementById('studentName').placeholder = 'Enter your name';
-                document.getElementById('interests').placeholder = 'e.g., software engineer, doctor, business, artist, government jobs';
-                document.querySelector('.submit-btn').innerHTML = '🚀 Get Career Guidance';
-                
-                // Restore English options
+                document.getElementById('interests').placeholder = 'e.g., teacher, police, nurse, business, software engineer';
+                document.getElementById('submitBtnText').textContent = 'Get Career Guidance';
+                document.getElementById('loadingText').textContent = 'AI is generating your personalized guidance...';
+                document.getElementById('resultsTitle').textContent = 'Your Career Guidance';
+                document.getElementById('resetBtnText').textContent = 'Get Another Guidance';
+
+                document.getElementById('helpTitle').textContent = 'Simple Steps (3)';
+                document.getElementById('helpStep1').textContent = 'Fill your name and last class passed.';
+                document.getElementById('helpStep2').textContent = 'Choose language and stream (if 12th).';
+                document.getElementById('helpStep3').textContent = 'Write your goal: teacher, police, nurse.';
+                document.getElementById('helpNote').textContent = 'Need very easy words? Turn on "Easy Language Mode".';
+
+                document.getElementById('nameLabel').textContent = 'Your Name';
+                document.getElementById('helpName').textContent = 'Example: Aman, Pooja';
+                document.getElementById('qualificationLabel').textContent = 'Last Class / Qualification';
+                document.getElementById('helpQualification').textContent = 'Choose the last class you passed or are studying now.';
+                document.getElementById('guidanceLanguageLabel').textContent = 'Guidance Language';
+                document.getElementById('helpGuidanceLanguage').textContent = 'Result will appear in this language.';
+                document.getElementById('simpleModeLabel').textContent = 'Easy Language Mode';
+                document.getElementById('simpleModeText').textContent = 'Use very simple words (best for rural students).';
+                document.getElementById('streamLabel').textContent = 'Stream (11th-12th)';
+                document.getElementById('helpStream').textContent = 'If you are in 12th, choose your stream.';
+                document.getElementById('educationStreamLabel').textContent = 'Stream/Field';
+                document.getElementById('branchLabel').textContent = 'Branch/Specialization';
+                document.getElementById('helpBranch').textContent = 'If you are not sure, keep General.';
+                document.getElementById('interestsLabel').textContent = 'Your Goal / Interest';
+                document.getElementById('helpInterests').textContent = 'Write one or two career goals.';
+
                 const qualificationSelect = document.getElementById('qualification');
+                const currentQualification = qualificationSelect.value;
                 qualificationSelect.innerHTML = `
-                    <option value="">Select qualification</option>
+                    <option value="">Select your last class</option>
                     <option value="10th">10th Pass/Appearing</option>
                     <option value="12th">12th Pass/Appearing</option>
                     <option value="diploma">Diploma</option>
                     <option value="bachelor">Bachelor's Degree</option>
                     <option value="master">Master's Degree</option>
                 `;
-                
-                document.querySelector('#streamField .form-label').textContent = '🎯 Stream (11th-12th)';
-                
+                qualificationSelect.value = currentQualification;
+
+                document.querySelector('#streamField .form-label').textContent = 'Stream (11th-12th)';
+
                 const streamSelect = document.getElementById('stream');
+                const currentStream = streamSelect.value;
                 streamSelect.innerHTML = `
+                    <option value="">Select stream</option>
                     <option value="Science">Science (PCM/PCB)</option>
                     <option value="Commerce">Commerce</option>
                     <option value="Arts">Arts/Humanities</option>
                 `;
+                streamSelect.value = currentStream;
+                populateBranchOptions(educationStream.value);
             }
         }
 
-        // Form submission
+// Form submission
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -1014,8 +1207,11 @@
                 qualification: document.getElementById('qualification').value,
                 stream: getStreamData(),
                 branch: document.getElementById('branch').value || 'General',
-                interests: document.getElementById('interests').value
+                interests: document.getElementById('interests').value,
+                guidanceLanguage: guidanceLanguage.value || 'English',
+                simpleMode: simpleMode.checked
             };
+            lastGuidanceLanguage = formData.guidanceLanguage || 'English';
 
             // Show loading
             form.style.display = 'none';
@@ -1041,7 +1237,8 @@
                 // If API fails, show sample guidance
                 loadingSection.style.display = 'none';
                 resultsSection.style.display = 'block';
-                guidanceContent.innerHTML = getContextAwareGuidance(formData);
+                const fallbackText = getFallbackGuidanceText(formData);
+                guidanceContent.innerHTML = formatGuidance(fallbackText, formData.name);
                 showBlogRecommendation(formData.interests);
                 updateStudentCount();
                 console.error('API Error:', error);
@@ -1053,9 +1250,9 @@
             const qualification = document.getElementById('qualification').value;
             
             if (qualification === '12th') {
-                return document.getElementById('stream').value;
+                return document.getElementById('stream').value || 'General';
             } else if (['diploma', 'bachelor', 'master'].includes(qualification)) {
-                return document.getElementById('educationStream').value;
+                return document.getElementById('educationStream').value || 'General';
             }
             return 'General';
         }
@@ -1096,11 +1293,23 @@
         }
 
         // Text-to-Speech Functionality
+        function getSpeechLang(language) {
+            const lang = (language || '').toLowerCase();
+            if (lang.includes('hindi') || lang.includes('hinglish')) return 'hi-IN';
+            if (lang.includes('bengali')) return 'bn-IN';
+            if (lang.includes('marathi')) return 'mr-IN';
+            if (lang.includes('tamil')) return 'ta-IN';
+            if (lang.includes('telugu')) return 'te-IN';
+            if (lang.includes('urdu')) return 'ur-IN';
+            return 'en-IN';
+        }
+
         function speakGuidance() {
             const guidanceText = document.getElementById('guidanceContent').innerText;
             if ('speechSynthesis' in window) {
                 const speech = new SpeechSynthesisUtterance();
                 speech.text = guidanceText;
+                speech.lang = getSpeechLang(lastGuidanceLanguage);
                 speech.rate = 0.8;
                 speech.pitch = 1;
                 window.speechSynthesis.speak(speech);
@@ -1117,7 +1326,9 @@
                 qualification: document.getElementById('qualification').value,
                 stream: getStreamData(),
                 branch: document.getElementById('branch').value || 'General',
-                interests: document.getElementById('interests').value
+                interests: document.getElementById('interests').value,
+                guidanceLanguage: guidanceLanguage.value || 'English',
+                simpleMode: simpleMode.checked
             };
             localStorage.setItem('careerFormData', JSON.stringify(formData));
             showNotification('Progress saved successfully!');
@@ -1131,6 +1342,8 @@
                 document.getElementById('studentName').value = formData.name || '';
                 document.getElementById('qualification').value = formData.qualification || '';
                 document.getElementById('interests').value = formData.interests || '';
+                guidanceLanguage.value = formData.guidanceLanguage || guidanceLanguage.value || 'English';
+                simpleMode.checked = !!formData.simpleMode;
                 
                 // Set stream and branch based on qualification
                 if (formData.qualification === '12th') {
@@ -1232,6 +1445,8 @@
             - Stream: ${formData.stream}
             - Branch/Specialization: ${formData.branch}
             - Career Interests: ${formData.interests}
+            - Preferred Guidance Language: ${formData.guidanceLanguage}
+            - Easy Language Mode: ${formData.simpleMode " 'ON' : 'OFF'}
 
             ${contextAnalysis.contextNote}
 
@@ -1244,38 +1459,40 @@
             4. Be honest about eligibility requirements and challenges
             5. Suggest alternative pathways if direct path is not possible
             6. Focus on Indian education system and job market
+            7. Write in the student's preferred language
+            8. If Easy Language Mode is ON, use very simple words, short sentences, and explain any technical term in brackets
 
-            RESPONSE STRUCTURE:
+            RESPONSE STRUCTURE (keep these exact English headings):
 
-            🎯 REALITY CHECK:
+            REALITY CHECK:
             - Honest assessment of current situation
             - Compatibility between stream and interests
             - Challenges and opportunities
             - Eligibility requirements
 
-            📚 RECOMMENDED PATHWAYS:
+            RECOMMENDED PATHWAYS:
             - Direct path (if available with current stream)
             - Alternative pathways (if stream change needed)
             - Bridge courses or additional qualifications
             - Entrance exams required
 
-            🛠️ SKILLS DEVELOPMENT:
+            SKILLS DEVELOPMENT:
             - Essential skills to learn
             - Technical and soft skills required
             - Certifications or courses needed
 
-            💼 CAREER OPPORTUNITIES:
+            CAREER OPPORTUNITIES:
             - Realistic job roles with current background
             - Salary expectations in India (₹ LPA)
             - Growth prospects and future scope
 
-            🚀 ACTION PLAN:
+            ACTION PLAN:
             - Immediate steps (next 3-6 months)
             - Medium-term goals (1-2 years)
             - Long-term strategy
             - Important deadlines and exams
 
-            🌟 FINAL ADVICE:
+            FINAL ADVICE:
             - Honest, motivational conclusion
             - Encouragement with realistic expectations
 
@@ -1432,93 +1649,150 @@
         }
 
         // UPDATED FORMATTING FUNCTION FOR CONTEXT-AWARE GUIDANCE
+        function normalizeGuidanceLanguage(language) {
+            const lang = (language || '').toLowerCase();
+            if (lang.includes('hindi') || lang.includes('hinglish')) {
+                return 'hindi';
+            }
+            return 'english';
+        }
+
+        function getGuidanceUiStrings(languageKey) {
+            if (languageKey === 'hindi') {
+                return {
+                    welcomeTitle: 'Namaste {name}!',
+                    welcomeIntro: 'Aapki padhai aur ruchi ke anusar yeh margdarshan hai:',
+                    motivationTitle: 'Sahi nirnay lijiye!',
+                    motivationText: 'Sahi yojana aur mehnat se aap aage badhenge.',
+                    salaryPlaceholder: 'Bazaar ke anusar',
+                    genericSection: 'Margdarshan'
+                };
+            }
+            return {
+                welcomeTitle: 'Welcome {name}!',
+                welcomeIntro: 'Based on your background, here is your guidance:',
+                motivationTitle: 'Make Informed Decisions!',
+                motivationText: 'With the right plan and steady effort, you will grow.',
+                salaryPlaceholder: 'Market competitive',
+                genericSection: 'Guidance'
+            };
+        }
+
+        function getSectionLabels(languageKey) {
+            if (languageKey === 'hindi') {
+                return {
+                    'REALITY CHECK': 'Vastavik sthiti',
+                    'RECOMMENDED PATHWAYS': 'Sujhaye gaye raste',
+                    'SKILLS DEVELOPMENT': 'Zaroori kaushal',
+                    'CAREER OPPORTUNITIES': 'Career avsar',
+                    'ACTION PLAN': 'Aapka action plan',
+                    'FINAL ADVICE': 'Antim salah'
+                };
+            }
+            return {
+                'REALITY CHECK': 'Reality Check & Assessment',
+                'RECOMMENDED PATHWAYS': 'Recommended Pathways',
+                'SKILLS DEVELOPMENT': 'Skills Development',
+                'CAREER OPPORTUNITIES': 'Career Opportunities',
+                'ACTION PLAN': 'Your Action Plan',
+                'FINAL ADVICE': 'Final Advice'
+            };
+        }
+
         function formatGuidance(text, studentName) {
             console.log("Raw AI Response:", text);
-            
+
+            const languageKey = normalizeGuidanceLanguage(lastGuidanceLanguage || guidanceLanguage.value);
+            const ui = getGuidanceUiStrings(languageKey);
+            const sections = getSectionLabels(languageKey);
+
             let html = `
                 <div class="guidance-section">
-                    <h3 class="section-title">👋 Welcome ${studentName}!</h3>
-                    <p>Based on your academic background and interests, here's your personalized and realistic career assessment:</p>
+                    <h3 class="section-title">${ui.welcomeTitle.replace('{name}', studentName || '')}</h3>
+                    <p>${ui.welcomeIntro}</p>
                 </div>
             `;
 
-            const sections = {
-                'REALITY CHECK': '🎯 Reality Check & Assessment',
-                'RECOMMENDED PATHWAYS': '📚 Recommended Pathways', 
-                'SKILLS DEVELOPMENT': '🛠️ Skills Development',
-                'CAREER OPPORTUNITIES': '💼 Career Opportunities',
-                'ACTION PLAN': '🚀 Your Action Plan',
-                'FINAL ADVICE': '🌟 Final Advice'
-            };
-
-            let currentSection = '';
+            let currentKey = '';
+            let currentTitle = '';
             let content = '';
+            let foundSection = false;
 
-            const lines = text.split('\n');
-            
+            const lines = text.split('
+');
+
             for (let line of lines) {
                 line = line.trim();
-                
+
                 if (!line) continue;
-                
+
                 let isSectionHeader = false;
-                for (const [key, value] of Object.entries(sections)) {
+                for (const key of Object.keys(sections)) {
                     if (line.toUpperCase().includes(key)) {
-                        if (currentSection && content) {
-                            html += createSection(currentSection, content.trim());
+                        if (currentKey && content.trim()) {
+                            html += createSection(currentKey, currentTitle, content.trim(), languageKey);
                         }
-                        currentSection = value;
+                        currentKey = key;
+                        currentTitle = sections[key];
                         content = '';
                         isSectionHeader = true;
+                        foundSection = true;
                         break;
                     }
                 }
 
                 if (!isSectionHeader && line) {
                     if (!Object.keys(sections).some(section => line.toUpperCase().includes(section))) {
-                        content += line + '\n';
+                        content += line + '
+';
                     }
                 }
             }
 
-            if (currentSection && content.trim()) {
-                html += createSection(currentSection, content.trim());
+            if (currentKey && content.trim()) {
+                html += createSection(currentKey, currentTitle, content.trim(), languageKey);
+            }
+
+            if (!foundSection && text.trim()) {
+                html += createSection('GENERAL', ui.genericSection, text.trim(), languageKey);
             }
 
             html += `
                 <div class="motivation-box">
-                    <h3>💪 Make Informed Decisions!</h3>
-                    <p>Your career journey should be based on realistic planning and your true passions. You've got this! 🚀</p>
+                    <h3>${ui.motivationTitle}</h3>
+                    <p>${ui.motivationText}</p>
                 </div>
             `;
 
             return html;
         }
 
-        function createSection(title, content) {
+        function createSection(sectionKey, title, content, languageKey) {
+            const ui = getGuidanceUiStrings(languageKey);
             let sectionHtml = `
                 <div class="guidance-section">
                     <h3 class="section-title">${title}</h3>
             `;
 
-            if (title === '💼 Career Opportunities') {
-                const items = content.split('\n').filter(line => {
+            if (sectionKey === 'CAREER OPPORTUNITIES') {
+                const items = content.split('
+').filter(line => {
                     const trimmed = line.trim();
-                    return trimmed && trimmed.length > 5;
+                    return trimmed && trimmed.length > 3;
                 });
-                
+
                 sectionHtml += `<div class="salary-list">`;
-                
+
                 items.forEach(item => {
-                    const trimmed = item.trim().replace(/^[•\-]\s*/, '');
-                    
+                    const trimmed = item.trim().replace(/^["\-]\s*/, '');
+
                     if (trimmed) {
-                        const salaryMatch = trimmed.match(/(.*?):?\s*(₹?[\d,\-–]+\s*(?:LPA|lakh|lakhs|Lakh))/i);
-                        
+                        const salaryMatch = trimmed.match(/(.*"):"\s*(""[\d,\-"]+\s*(":LPA|lakh|lakhs|Lakh))/i);
+
                         if (salaryMatch) {
                             const role = salaryMatch[1].trim();
                             const salary = salaryMatch[2].trim();
-                            
+
                             sectionHtml += `
                                 <div class="salary-item">
                                     <span class="salary-role">${role}</span>
@@ -1529,24 +1803,25 @@
                             sectionHtml += `
                                 <div class="salary-item">
                                     <span class="salary-role">${trimmed}</span>
-                                    <span class="salary-amount">Market competitive</span>
+                                    <span class="salary-amount">${ui.salaryPlaceholder}</span>
                                 </div>
                             `;
                         }
                     }
                 });
-                
+
                 sectionHtml += `</div>`;
-                
-            } else if (title === '🚀 Your Action Plan') {
-                const items = content.split('\n').filter(line => {
+
+            } else if (sectionKey === 'ACTION PLAN') {
+                const items = content.split('
+').filter(line => {
                     const trimmed = line.trim();
-                    return trimmed && trimmed.length > 5;
+                    return trimmed && trimmed.length > 3;
                 });
-                
+
                 sectionHtml += `<ol class="plan-list">`;
                 items.forEach((item, index) => {
-                    const trimmed = item.replace(/^\d+\.\s*/, '').replace(/^[•\-]\s*/, '').trim();
+                    const trimmed = item.replace(/^\d+\.\s*/, '').replace(/^["\-]\s*/, '').trim();
                     if (trimmed) {
                         sectionHtml += `
                             <li>
@@ -1558,18 +1833,19 @@
                 });
                 sectionHtml += `</ol>`;
             } else {
-                const items = content.split('\n').filter(line => {
+                const items = content.split('
+').filter(line => {
                     const trimmed = line.trim();
-                    return trimmed && trimmed.length > 5;
+                    return trimmed && trimmed.length > 3;
                 });
-                
+
                 sectionHtml += `<ul class="skills-list">`;
                 items.forEach(item => {
-                    const trimmed = item.replace(/^[•\-]\s*/, '').trim();
+                    const trimmed = item.replace(/^["\-]\s*/, '').trim();
                     if (trimmed) {
                         sectionHtml += `
                             <li>
-                                <span class="bullet-point">•</span>
+                                <span class="bullet-point">"</span>
                                 <span>${trimmed}</span>
                             </li>
                         `;
@@ -1583,118 +1859,121 @@
         }
 
         // CONTEXT-AWARE SAMPLE GUIDANCE FOR API FAILURE
-        function getContextAwareGuidance(formData) {
-            const stream = formData.stream;
-            const interests = formData.interests.toLowerCase();
-            
-            // Commerce student wants Medical
-            if (stream === "Commerce" && (interests.includes('doctor') || interests.includes('medical'))) {
-                return `
-                    <div class="guidance-section">
-                        <h3 class="section-title">🎯 Reality Check & Assessment</h3>
-                        <p>With your Commerce background, pursuing Medical field (MBBS/BDS) directly is not possible as it requires Science stream with Physics, Chemistry, Biology.</p>
-                    </div>
+        function getFallbackGuidanceText(formData) {
+            const stream = formData.stream || 'General';
+            const interests = (formData.interests || '').toLowerCase();
+            const languageKey = normalizeGuidanceLanguage(formData.guidanceLanguage);
 
-                    <div class="guidance-section">
-                        <h3 class="section-title">📚 Recommended Pathways</h3>
-                        <ul class="skills-list">
-                            <li><span class="bullet-point">•</span><span><strong>Alternative Healthcare Careers:</strong> Hospital Management, Healthcare Administration, Medical Tourism</span></li>
-                            <li><span class="bullet-point">•</span><span><strong>Stream Change Option:</strong> You'd need to complete 11th-12th Science with PCB</span></li>
-                            <li><span class="bullet-point">•</span><span><strong>Paramedical Courses:</strong> BSc Nursing, Pharmacy, Physiotherapy (require Science background)</span></li>
-                        </ul>
-                    </div>
+            if (stream === "Commerce" && (interests.includes('doctor') || interests.includes('medical') || interests.includes('neet'))) {
+                if (languageKey === 'hindi') {
+                    return `REALITY CHECK:
+- Commerce se MBBS/BDS direct nahi hota kyunki PCB subjects chahiye.
+- Fir bhi healthcare me dusre raste hain.
 
-                    <div class="guidance-section">
-                        <h3 class="section-title">💼 Career Opportunities</h3>
-                        <div class="salary-list">
-                            <div class="salary-item">
-                                <span class="salary-role">Hospital Administrator</span>
-                                <span class="salary-amount">₹6-15 LPA</span>
-                            </div>
-                            <div class="salary-item">
-                                <span class="salary-role">Healthcare Manager</span>
-                                <span class="salary-amount">₹8-20 LPA</span>
-                            </div>
-                            <div class="salary-item">
-                                <span class="salary-role">Medical Billing Executive</span>
-                                <span class="salary-amount">₹3-6 LPA</span>
-                            </div>
-                        </div>
-                    </div>
+RECOMMENDED PATHWAYS:
+- Hospital management, healthcare admin, medical billing dekhen.
+- Agar MBBS chahiye to Science (PCB) le kar NEET ki taiyari karein.
 
-                    <div class="guidance-section">
-                        <h3 class="section-title">🚀 Your Action Plan</h3>
-                        <ol class="plan-list">
-                            <li><span class="bullet-point">1.</span><span>Research healthcare management courses (BBA in Hospital Management)</span></li>
-                            <li><span class="bullet-point">2.</span><span>Consider stream change only if absolutely determined for MBBS</span></li>
-                            <li><span class="bullet-point">3.</span><span>Explore paramedical options that accept Commerce students</span></li>
-                            <li><span class="bullet-point">4.</span><span>Build skills in healthcare administration and management</span></li>
-                        </ol>
-                    </div>
+SKILLS DEVELOPMENT:
+- Communication, basic computer, data handling.
+- Agar stream change karni hai to science basics par kaam karein.
 
-                    <div class="motivation-box">
-                        <h3>🌟 Final Advice</h3>
-                        <p>While direct Medical path isn't available, your Commerce skills are valuable in healthcare administration. Consider combining your strengths with healthcare knowledge!</p>
-                    </div>
-                `;
+CAREER OPPORTUNITIES:
+- Hospital/Clinic Admin: ?3-6 LPA
+- Medical Billing Executive: ?3-5 LPA
+- Healthcare Coordinator: ?3-6 LPA
+
+ACTION PLAN:
+- Decide karein: stream change ya healthcare management.
+- Teacher/counselor se eligibility poochhen.
+- Ek chhota course shuru karein.
+
+FINAL ADVICE:
+- Wahi raasta chune jo subjects aur time ke hisab se sahi ho.`;
+                }
+                return `REALITY CHECK:
+- With Commerce, MBBS/BDS is not direct because PCB subjects are required.
+- You still have good options in healthcare.
+
+RECOMMENDED PATHWAYS:
+- Consider hospital management, healthcare administration, medical billing.
+- If you want MBBS, switch to Science (PCB) and prepare for NEET.
+
+SKILLS DEVELOPMENT:
+- Communication, basic computer, data handling.
+- If changing stream, build science basics.
+
+CAREER OPPORTUNITIES:
+- Hospital/Clinic Admin: ?3-6 LPA
+- Medical Billing Executive: ?3-5 LPA
+- Healthcare Coordinator: ?3-6 LPA
+
+ACTION PLAN:
+- Decide between stream change or healthcare management.
+- Ask a teacher/counselor about eligibility.
+- Start a short course.
+
+FINAL ADVICE:
+- Choose the path that fits your subjects and time.`;
             }
 
-            // Default sample guidance for other cases
-            return getSampleGuidance(formData);
+            return getSampleGuidanceText(formData, languageKey);
         }
 
-        // Keep the original sample guidance as fallback
-        function getSampleGuidance(formData) {
-            return `
-                <div class="guidance-section">
-                    <h3 class="section-title">👋 Welcome ${formData.name}!</h3>
-                    <p>First of all, don't worry at all. You're on the right path by seeking guidance!</p>
-                </div>
+        function getSampleGuidanceText(formData, languageKey) {
+            if (languageKey === 'hindi') {
+                return `REALITY CHECK:
+- Aapki class aur subjects decide karte hain ki kaunsa path direct hai.
+- Chinta na karein, aapke liye achhe options hain.
 
-                <div class="guidance-section">
-                    <h3 class="section-title">🛠️ Essential Skills to Master</h3>
-                    <ul class="skills-list">
-                        <li><span class="bullet-point">•</span><span>Core fundamentals in ${formData.interests}</span></li>
-                        <li><span class="bullet-point">•</span><span>Practical project experience</span></li>
-                        <li><span class="bullet-point">•</span><span>Communication and presentation skills</span></li>
-                        <li><span class="bullet-point">•</span><span>Industry-specific tools and technologies</span></li>
-                    </ul>
-                </div>
+RECOMMENDED PATHWAYS:
+- Agar stream aur goal match kare, usi me aage badhen.
+- Agar nahi, to pass ke goals chune ya sahi subjects ke saath stream change karein.
 
-                <div class="guidance-section">
-                    <h3 class="section-title">💼 Career Opportunities & Salaries</h3>
-                    <div class="salary-list">
-                        <div class="salary-item">
-                            <span class="salary-role">Entry Level Position</span>
-                            <span class="salary-amount">₹3-6 LPA</span>
-                        </div>
-                        <div class="salary-item">
-                            <span class="salary-role">Experienced Professional</span>
-                            <span class="salary-amount">₹8-15 LPA</span>
-                        </div>
-                        <div class="salary-item">
-                            <span class="salary-role">Senior Role</span>
-                            <span class="salary-amount">₹15-25 LPA</span>
-                        </div>
-                    </div>
-                </div>
+SKILLS DEVELOPMENT:
+- Basic computer, bolna, likhna.
+- Goal se juda ek skill sikhen (typing, MS Office, etc.).
 
-                <div class="guidance-section">
-                    <h3 class="section-title">🚀 Your Step-by-Step Action Plan</h3>
-                    <ol class="plan-list">
-                        <li><span class="bullet-point">1.</span><span>Research your field thoroughly</span></li>
-                        <li><span class="bullet-point">2.</span><span>Build practical skills through online courses</span></li>
-                        <li><span class="bullet-point">3.</span><span>Create portfolio projects</span></li>
-                        <li><span class="bullet-point">4.</span><span>Network with professionals</span></li>
-                        <li><span class="bullet-point">5.</span><span>Apply for internships and jobs</span></li>
-                    </ol>
-                </div>
+CAREER OPPORTUNITIES:
+- Entry roles: ?3-6 LPA (shehar ke hisab se)
+- Skill ke baad better roles: ?4-8 LPA
+- Government jobs (exam ke baad): ?3-7 LPA
 
-                <div class="motivation-box">
-                    <h3>🎯 You've Got This!</h3>
-                    <p>Remember, consistency beats talent. Keep learning daily and your dedication will take you far! 🚀</p>
-                </div>
-            `;
+ACTION PLAN:
+- Apna stream/field clear karein.
+- Teacher/mentor se exams ki jankari lein.
+- Roz thoda practice karein.
+- Zaroori exams ki taiyari shuru karein.
+
+FINAL ADVICE:
+- Roz ke chhote steps se bada result aata hai.`;
+            }
+
+            return `REALITY CHECK:
+- Your class and subjects decide which paths are direct.
+- Do not worry, you have good options.
+
+RECOMMENDED PATHWAYS:
+- If your stream matches your goal, continue in the same stream.
+- If not, choose a nearby goal or plan a stream change with the right subjects.
+
+SKILLS DEVELOPMENT:
+- Basic computer, speaking, writing.
+- Learn one skill linked to your goal (typing, MS Office, etc.).
+
+CAREER OPPORTUNITIES:
+- Entry roles: ?3-6 LPA (varies by city)
+- Skilled roles after certification: ?4-8 LPA
+- Government jobs (after exams): ?3-7 LPA
+
+ACTION PLAN:
+- Decide your stream/field clearly.
+- Ask a teacher/mentor about exams.
+- Practice a little daily.
+- Start exam preparation if needed.
+
+FINAL ADVICE:
+- Small daily steps create big results.`;
         }
 
         function resetForm() {
@@ -1705,6 +1984,7 @@
             blogRecommendation.style.display = 'none';
             form.style.display = 'block';
             submitBtn.disabled = false;
+            populateBranchOptions(educationStream.value);
         }
 
         // Load saved progress when page loads
