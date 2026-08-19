@@ -1140,46 +1140,108 @@
             }
         }
 
-        const syllabusDatabase = {
-            'odisha 10th': { title: 'Odisha BSE 10th Board', details: 'Subjects: Odia, English, Math, Science, Social Science. Exam: Feb-Mar.' },
-            'bihar 12th': { title: 'Bihar BSEB 12th Board', details: 'Streams: Science (PCM/PCB), Commerce, Arts. Exam: Feb.' },
-            'ssc cgl': { title: 'SSC CGL Exam Syllabus', details: 'Tier-1: Quant, Reasoning, English, General Awareness. Tier-2: Advanced Math & English.' },
-            'jee mains': { title: 'JEE Mains Syllabus', details: 'Physics, Chemistry, Mathematics (Class 11 & 12 Syllabus). NTA Exam.' },
-            'neet ug': { title: 'NEET UG Medical Syllabus', details: 'Physics (45 Qs), Chemistry (45 Qs), Biology (90 Qs). NTA NEET.' },
-            'full stack': { title: 'Full Stack Development', details: 'HTML5, CSS3, JavaScript, React/Node.js, PostgreSQL/MongoDB, Git, Deployment.' },
-            'ca foundation': { title: 'CA Foundation (ICAI)', details: 'Accounting, Business Laws, Quantitative Aptitude, Business Economics.' },
-            'gate': { title: 'GATE Engineering Exam', details: 'Engineering Mathematics, General Aptitude, Core Subject Paper (CS/EC/ME/EE/CE).' }
-        };
+        const syllabusDatabase = [
+            {
+                key: 'odisha 10th',
+                title: 'Odisha BSE 10th Board Exam',
+                aliases: 'odisha board 10th bse odia matriculation 10 class',
+                details: '• <strong>Languages:</strong> First Language (Odia/Bengali/Hindi), Second Language (English), Third Language (Hindi/Sanskrit)<br>• <strong>Core Subjects:</strong> Mathematics (Algebra & Geometry), General Science (Physical & Life Science), Social Science (History, Geography, Political Science, Economics)<br>• <strong>Exam Window:</strong> Feb - Mar | <strong>Official Site:</strong> bseodisha.ac.in'
+            },
+            {
+                key: 'odisha 12th',
+                title: 'Odisha CHSE 12th Board Exam',
+                aliases: 'odisha board 12th chse science commerce arts +2 inter',
+                details: '• <strong>Science:</strong> Physics, Chemistry, Mathematics, Biology, IT/Computer Science<br>• <strong>Commerce:</strong> Accountancy, Business Studies, Business Math & Statistics, Economics<br>• <strong>Arts:</strong> Political Science, History, Economics, Sociology, Logic<br>• <strong>Official Site:</strong> chseodisha.nic.in'
+            },
+            {
+                key: 'bihar 12th',
+                title: 'Bihar BSEB 12th Board Exam',
+                aliases: 'bihar board 12th bseb +2 inter intermediate',
+                details: '• <strong>Streams:</strong> Science (Physics, Chem, Math/Bio), Commerce (Accountancy, BST, Eco), Arts (History, Pol Sci, Geo)<br>• <strong>Exam Pattern:</strong> 50% Objective MCQs + 50% Subjective Questions<br>• <strong>Official Site:</strong> biharboardonline.bihar.gov.in'
+            },
+            {
+                key: 'ssc cgl',
+                title: 'SSC Combined Graduate Level (CGL)',
+                aliases: 'ssc cgl tier 1 tier 2 staff selection commission officer',
+                details: '• <strong>Tier 1:</strong> Reasoning (50m), General Awareness (50m), Quant (50m), English (50m)<br>• <strong>Tier 2:</strong> Mathematical Abilities, Reasoning, English Language, General Awareness, Computer Knowledge & Data Entry Test<br>• <strong>Official Site:</strong> ssc.gov.in'
+            },
+            {
+                key: 'jee mains',
+                title: 'JEE Mains (NTA Engineering Entrance)',
+                aliases: 'jee mains nta iit engineering entrance exam',
+                details: '• <strong>Physics:</strong> Mechanics, Electrodynamics, Modern Physics, Optics, Thermodynamics (Class 11 & 12)<br>• <strong>Chemistry:</strong> Physical, Organic, Inorganic Chemistry<br>• <strong>Mathematics:</strong> Algebra, Calculus, Coordinate Geometry, Trigonometry<br>• <strong>Official Site:</strong> jeemain.nta.nic.in'
+            },
+            {
+                key: 'neet ug',
+                title: 'NEET UG (NTA Medical Entrance)',
+                aliases: 'neet ug medical nta mbbs bds entrance exam doctor',
+                details: '• <strong>Biology:</strong> Botany & Zoology (90 Qs - 360 Marks - 100% NCERT syllabus)<br>• <strong>Chemistry:</strong> Physical, Organic, Inorganic (45 Qs - 180 Marks)<br>• <strong>Physics:</strong> Mechanics, Electrodynamics, Optics (45 Qs - 180 Marks)<br>• <strong>Official Site:</strong> neet.nta.nic.in'
+            },
+            {
+                key: 'full stack',
+                title: 'Full Stack Web Development Track',
+                aliases: 'full stack web dev javascript react node frontend backend coding',
+                details: '• <strong>Frontend:</strong> HTML5, CSS3, JavaScript ES6+, React.js / Next.js, Tailwind CSS<br>• <strong>Backend:</strong> Node.js, Express.js, REST APIs, GraphQL<br>• <strong>Database & DevOps:</strong> PostgreSQL, MongoDB, Git/GitHub, Docker, Vercel/Netlify Deployment'
+            },
+            {
+                key: 'ca foundation',
+                title: 'CA Foundation (ICAI Course)',
+                aliases: 'ca foundation icai chartered accountant accounting finance',
+                details: '• <strong>Paper 1:</strong> Accounting (100 Marks)<br>• <strong>Paper 2:</strong> Business Laws (100 Marks)<br>• <strong>Paper 3:</strong> Quantitative Aptitude (Maths, Stats, Logical Reasoning - 100 Marks)<br>• <strong>Paper 4:</strong> Business Economics (100 Marks)<br>• <strong>Official Site:</strong> icai.org'
+            },
+            {
+                key: 'data science',
+                title: 'Data Science & AI / ML Track',
+                aliases: 'data science ai ml machine learning python sql analytics',
+                details: '• <strong>Programming & Stats:</strong> Python, NumPy, Pandas, Descriptive & Inferential Statistics<br>• <strong>Machine Learning:</strong> Supervised/Unsupervised Models, Scikit-Learn, Feature Engineering<br>• <strong>Deep Learning & GenAI:</strong> TensorFlow/PyTorch, LLMs, LangChain, RAG Pipelines, Vector DBs'
+            },
+            {
+                key: 'gate',
+                title: 'GATE Engineering Exam',
+                aliases: 'gate engineering psu post graduate iit master',
+                details: '• <strong>General Aptitude:</strong> Verbal Ability & Numerical Ability (15 Marks)<br>• <strong>Engineering Mathematics:</strong> Linear Algebra, Calculus, Differential Equations (13 Marks)<br>• <strong>Core Paper:</strong> Specific Branch Subject (72 Marks - CS, EC, ME, EE, CE, etc.)<br>• <strong>Official Site:</strong> gate2025.iisc.ac.in'
+            }
+        ];
 
         function quickGetSyllabus() {
-            const input = document.getElementById('quickSyllabusInput')?.value.toLowerCase().trim();
+            const rawInput = document.getElementById('quickSyllabusInput')?.value.toLowerCase().trim();
             const resultDiv = document.getElementById('quickResult');
             if (!resultDiv) return;
 
-            if (!input) {
+            if (!rawInput) {
                 resultDiv.style.display = 'block';
                 resultDiv.innerHTML = '<span style="color: #ef4444;">Please type an exam name or select a quick chip!</span>';
                 return;
             }
 
-            let found = null;
-            for (let key in syllabusDatabase) {
-                if (key.includes(input) || input.includes(key)) {
-                    found = syllabusDatabase[key];
-                    break;
+            const tokens = rawInput.split(/\s+/).filter(t => t.length > 1 && t !== 'board' && t !== 'exam');
+            let bestMatch = null;
+            let maxScore = 0;
+
+            syllabusDatabase.forEach(item => {
+                const matchText = (item.key + ' ' + item.title + ' ' + item.aliases).toLowerCase();
+                let score = 0;
+                tokens.forEach(token => {
+                    if (matchText.includes(token)) score += 2;
+                });
+                if (matchText.includes(rawInput)) score += 5;
+
+                if (score > maxScore) {
+                    maxScore = score;
+                    bestMatch = item;
                 }
-            }
+            });
 
             resultDiv.style.display = 'block';
-            if (found) {
+            if (bestMatch && maxScore > 0) {
                 resultDiv.innerHTML = `
-                    <h4 style="color: #0284c7; margin-bottom: 6px;">📘 ${escapeHTML(found.title)}</h4>
-                    <p style="font-size: 0.9rem; color: #e2e8f0; line-height: 1.5;">${escapeHTML(found.details)}</p>
+                    <h4 style="color: #38bdf8; margin-bottom: 8px;">📘 ${escapeHTML(bestMatch.title)}</h4>
+                    <div style="font-size: 0.9rem; color: #e2e8f0; line-height: 1.6;">${bestMatch.details}</div>
                 `;
             } else {
                 resultDiv.innerHTML = `
-                    <h4 style="color: #0284c7; margin-bottom: 6px;">🔍 ${escapeHTML(input.toUpperCase())} Syllabus Overview</h4>
-                    <p style="font-size: 0.9rem; color: #e2e8f0; line-height: 1.5;">Comprehensive syllabus includes core subjects, previous year papers, and practice sets. Refer to official portal for exact notifications.</p>
+                    <h4 style="color: #38bdf8; margin-bottom: 8px;">🔍 ${escapeHTML(rawInput.toUpperCase())} Syllabus Overview</h4>
+                    <p style="font-size: 0.9rem; color: #e2e8f0; line-height: 1.5;">Comprehensive syllabus includes core subjects, previous year question banks, and practice sets. Refer to the official portal for exact notifications.</p>
                 `;
             }
         }
