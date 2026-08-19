@@ -906,78 +906,191 @@
         }
 
         function generateSmartAIResponse(data) {
+            return generateDynamicCareerRoadmap(data);
+        }
+
+        function generateDynamicCareerRoadmap(data) {
             const { name, qual, stream, branch, interests, lang } = data;
             const isHindi = lang === 'Hindi';
+            const target = (interests || '').toLowerCase();
 
-            const greeting = isHindi ? `👋 Namaste ${name}! Aapka Personalized AI Career Guide Ready Hai` : `👋 Welcome ${name}! Your Personalized Career Blueprint is Ready`;
+            const isMedical = target.includes('doctor') || target.includes('medical') || target.includes('neet') || target.includes('mbbs') || target.includes('nursing') || target.includes('hospital');
+            const isSoftware = target.includes('software') || target.includes('coding') || target.includes('developer') || target.includes('computer') || target.includes('ai') || target.includes('data science') || target.includes('web') || target.includes('tech');
+            const isGovt = target.includes('government') || target.includes('upsc') || target.includes('ssc') || target.includes('bank') || target.includes('sarkari') || target.includes('ias') || target.includes('ips') || target.includes('cgl');
+            const isDefense = target.includes('army') || target.includes('defense') || target.includes('defence') || target.includes('navy') || target.includes('air force') || target.includes('nda') || target.includes('cds');
+            const isBusiness = target.includes('business') || target.includes('startup') || target.includes('entrepreneur') || target.includes('management') || target.includes('mba') || target.includes('marketing');
+
+            const greeting = isHindi ? `👋 Namaste ${name}! Aapka Customized AI Career Blueprint Ready Hai` : `👋 Welcome ${name}! Your Customized AI Career Blueprint is Ready`;
+
+            let realityCheck = '';
+            let pathways = '';
+            let skills = '';
+            let salary = '';
+            let actionPlan = '';
+
+            if (isMedical) {
+                realityCheck = `
+                    <li><span class="bullet-point">🩺</span> <span><strong>Subject Requirement:</strong> Direct MBBS/BDS requires Class 12 Science (PCB) & NEET UG qualification.</span></li>
+                    <li><span class="bullet-point">📈</span> <span><strong>Market Dynamics:</strong> Over 24 lakh students write NEET UG annually. Alternative high-growth sectors include Hospital Management, B.Pharm, and Biotech.</span></li>
+                    <li><span class="bullet-point">💡</span> <span><strong>Key Strategy:</strong> 100% NCERT Biology memorization + 150 daily MCQ practice is mandatory.</span></li>
+                `;
+                pathways = `
+                    <div class="salary-item"><div><strong style="color: var(--accent);">Pathway 1: Core Clinical Track (NEET UG)</strong><p style="font-size: 0.85rem; opacity: 0.8; margin-top: 2px;">MBBS / BDS / BAMS / BHMS via NEET entrance examination.</p></div></div>
+                    <div class="salary-item"><div><strong style="color: var(--accent);">Pathway 2: Allied Healthcare & Pharma</strong><p style="font-size: 0.85rem; opacity: 0.8; margin-top: 2px;">B.Pharm / Pharm.D, Physiotherapy (BPT), B.Sc Nursing, Clinical Research.</p></div></div>
+                    <div class="salary-item"><div><strong style="color: var(--accent);">Pathway 3: Healthcare Management & Tech</strong><p style="font-size: 0.85rem; opacity: 0.8; margin-top: 2px;">BBA/MBA in Hospital Administration, Health Informatics, Medical Billing.</p></div></div>
+                `;
+                skills = `
+                    <li><span class="bullet-point">🔬</span> <span>Human Anatomy, Biochemistry & Clinical Protocols</span></li>
+                    <li><span class="bullet-point">💊</span> <span>Pharmacology & Medical Terminology</span></li>
+                    <li><span class="bullet-point">🗣️</span> <span>Patient Care & High-Pressure Communication</span></li>
+                `;
+                salary = `
+                    <div class="salary-item"><span class="salary-role">Junior Resident / Clinic Admin</span><span class="salary-amount" style="color: #10b981; font-weight: 700;">₹5.5 - ₹9.0 LPA</span></div>
+                    <div class="salary-item"><span class="salary-role">Specialist Doctor / Hospital Manager</span><span class="salary-amount" style="color: #10b981; font-weight: 700;">₹12.0 - ₹24.0 LPA</span></div>
+                    <div class="salary-item"><span class="salary-role">Senior Consultant / Medical Director</span><span class="salary-amount" style="color: #10b981; font-weight: 700;">₹25.0 - ₹50.0+ LPA</span></div>
+                `;
+                actionPlan = `
+                    <li><span class="bullet-point">1.</span> <span><strong>Month 1:</strong> Master 100% NCERT Biology (Class 11 & 12) & line-by-line notes.</span></li>
+                    <li><span class="bullet-point">2.</span> <span><strong>Month 2:</strong> Solve last 10 years NEET UG chapterwise question papers.</span></li>
+                    <li><span class="bullet-point">3.</span> <span><strong>Month 3:</strong> Enroll in a full-length 3 hr 20 min mock exam series.</span></li>
+                    <li><span class="bullet-point">4.</span> <span><strong>Month 4:</strong> Finalize counseling preferences (All India Quota vs State Quota).</span></li>
+                `;
+            } else if (isSoftware) {
+                realityCheck = `
+                    <li><span class="bullet-point">💻</span> <span><strong>Portfolio vs Degree:</strong> In Software & AI, verified GitHub code & LeetCode problem solving carry 5x weight over college brand.</span></li>
+                    <li><span class="bullet-point">🚀</span> <span><strong>Frontier Growth:</strong> Full-Stack Web Development, Cloud DevOps, and Generative AI/ML are growing at 24% CAGR.</span></li>
+                    <li><span class="bullet-point">💡</span> <span><strong>Key Strategy:</strong> Master 1 Core Language (JavaScript/Python) + 1 Database + Data Structures.</span></li>
+                `;
+                pathways = `
+                    <div class="salary-item"><div><strong style="color: var(--accent);">Pathway 1: Product Engineering (SDE Track)</strong><p style="font-size: 0.85rem; opacity: 0.8; margin-top: 2px;">Full-Stack Development (React/Node.js/Next.js) or System Architecture.</p></div></div>
+                    <div class="salary-item"><div><strong style="color: var(--accent);">Pathway 2: AI / ML & Data Engineering</strong><p style="font-size: 0.85rem; opacity: 0.8; margin-top: 2px;">Python, PyTorch, LangChain, RAG Pipelines, Vector DBs (Pinecone/Chroma).</p></div></div>
+                    <div class="salary-item"><div><strong style="color: var(--accent);">Pathway 3: Cloud & DevOps Security</strong><p style="font-size: 0.85rem; opacity: 0.8; margin-top: 2px;">AWS/Azure, Docker, Kubernetes, CI/CD Automated Deployment.</p></div></div>
+                `;
+                skills = `
+                    <li><span class="bullet-point">🧠</span> <span>Data Structures & Algorithms (DSA - Arrays, Trees, Graphs, DP)</span></li>
+                    <li><span class="bullet-point">🌐</span> <span>Full-Stack Web Architecture (React, Node, PostgreSQL/MongoDB, REST/GraphQL)</span></li>
+                    <li><span class="bullet-point">🛠️</span> <span>Git Version Control, Linux Shell, Cloud Deployment (Docker/Vercel/Netlify)</span></li>
+                `;
+                salary = `
+                    <div class="salary-item"><span class="salary-role">Junior Developer / Intern</span><span class="salary-amount" style="color: #10b981; font-weight: 700;">₹4.5 - ₹8.5 LPA</span></div>
+                    <div class="salary-item"><span class="salary-role">SDE-2 / Senior Full Stack Engineer</span><span class="salary-amount" style="color: #10b981; font-weight: 700;">₹12.0 - ₹22.0 LPA</span></div>
+                    <div class="salary-item"><span class="salary-role">Lead AI Architect / Staff Engineer</span><span class="salary-amount" style="color: #10b981; font-weight: 700;">₹25.0 - ₹45.0+ LPA</span></div>
+                `;
+                actionPlan = `
+                    <li><span class="bullet-point">1.</span> <span><strong>Month 1:</strong> Build 2 full-stack projects using React & Node.js and deploy live.</span></li>
+                    <li><span class="bullet-point">2.</span> <span><strong>Month 2:</strong> Solve 150+ DSA problems on LeetCode/GeeksforGeeks.</span></li>
+                    <li><span class="bullet-point">3.</span> <span><strong>Month 3:</strong> Build an open-source GenAI project using LLMs & LangChain.</span></li>
+                    <li><span class="bullet-point">4.</span> <span><strong>Month 4:</strong> Optimize LinkedIn & GitHub profiles and apply for tech referrals.</span></li>
+                `;
+            } else if (isGovt) {
+                realityCheck = `
+                    <li><span class="bullet-point">🏛️</span> <span><strong>Job Security & Prestige:</strong> Central & State Government jobs offer permanent tenure, pensions, and high societal authority.</span></li>
+                    <li><span class="bullet-point">📊</span> <span><strong>Selection Ratio:</strong> Tier 1 & Tier 2 written exams test speed, accuracy, and general awareness.</span></li>
+                    <li><span class="bullet-point">💡</span> <span><strong>Key Strategy:</strong> Daily newspaper analysis + previous 10 years solved paper practice.</span></li>
+                `;
+                pathways = `
+                    <div class="salary-item"><div><strong style="color: var(--accent);">Pathway 1: Civil Services (UPSC IAS/IPS/IFS)</strong><p style="font-size: 0.85rem; opacity: 0.8; margin-top: 2px;">Top administrative officer cadre serving State & Central administration.</p></div></div>
+                    <div class="salary-item"><div><strong style="color: var(--accent);">Pathway 2: Staff Selection Commission (SSC CGL)</strong><p style="font-size: 0.85rem; opacity: 0.8; margin-top: 2px;">Inspector, Tax Assistant, Examiner in Central Ministries & Depts.</p></div></div>
+                    <div class="salary-item"><div><strong style="color: var(--accent);">Pathway 3: Banking Officers (IBPS PO / SBI PO)</strong><p style="font-size: 0.85rem; opacity: 0.8; margin-top: 2px;">Probationary Officer in Public Sector Nationalized Banks.</p></div></div>
+                `;
+                skills = `
+                    <li><span class="bullet-point">📐</span> <span>Quantitative Aptitude & High-Speed Mental Calculation</span></li>
+                    <li><span class="bullet-point">🧩</span> <span>Logical Reasoning & Complex Analytical Puzzles</span></li>
+                    <li><span class="bullet-point">📰</span> <span>General Studies (Polity, History, Economy, Geography) & Current Affairs</span></li>
+                `;
+                salary = `
+                    <div class="salary-item"><span class="salary-role">Assistant / Inspector / Clerk</span><span class="salary-amount" style="color: #10b981; font-weight: 700;">₹4.2 - ₹7.5 LPA + Govt Perks</span></div>
+                    <div class="salary-item"><span class="salary-role">Bank PO / Section Officer</span><span class="salary-amount" style="color: #10b981; font-weight: 700;">₹7.5 - ₹12.0 LPA + Quarters</span></div>
+                    <div class="salary-item"><span class="salary-role">IAS / IPS / Joint Secretary</span><span class="salary-amount" style="color: #10b981; font-weight: 700;">₹10.0 - ₹22.0+ LPA + Housing/Car</span></div>
+                `;
+                actionPlan = `
+                    <li><span class="bullet-point">1.</span> <span><strong>Month 1:</strong> Read Class 6-12 NCERTs for History, Polity & Geography.</span></li>
+                    <li><span class="bullet-point">2.</span> <span><strong>Month 2:</strong> Master speed-math techniques for Quant & Reasoning.</span></li>
+                    <li><span class="bullet-point">3.</span> <span><strong>Month 3:</strong> Solve 50+ timed full-length mock tests for Prelims.</span></li>
+                    <li><span class="bullet-point">4.</span> <span><strong>Month 4:</strong> Practice descriptive answer writing for Mains & GD.</span></li>
+                `;
+            } else if (isDefense) {
+                realityCheck = `
+                    <li><span class="bullet-point">🎖️</span> <span><strong>Honor & Discipline:</strong> Armed Forces offer leadership, adventurous life, and prestigious Officer commissions.</span></li>
+                    <li><span class="bullet-point">💪</span> <span><strong>Selection Criteria:</strong> Written entrance + 5-day Service Selection Board (SSB) interview & medical fitness.</span></li>
+                `;
+                pathways = `
+                    <div class="salary-item"><div><strong style="color: var(--accent);">Pathway 1: National Defense Academy (NDA)</strong><p style="font-size: 0.85rem; opacity: 0.8; margin-top: 2px;">Direct entry after Class 12 for Army, Navy, Air Force officer training.</p></div></div>
+                    <div class="salary-item"><div><strong style="color: var(--accent);">Pathway 2: Combined Defense Services (CDS / AFCAT)</strong><p style="font-size: 0.85rem; opacity: 0.8; margin-top: 2px;">Officer entry after Graduation (IMA, OTA, AFA, NAVAC).</p></div></div>
+                `;
+                skills = `
+                    <li><span class="bullet-point">🏃</span> <span>Physical Endurance (Running, Pushups) & Officer Like Qualities (OLQ)</span></li>
+                    <li><span class="bullet-point">🗣️</span> <span>Public Speaking, Group Discussion & SSB Psychological Testing</span></li>
+                `;
+                salary = `
+                    <div class="salary-item"><span class="salary-role">Cadet Trainee Stipend</span><span class="salary-amount" style="color: #10b981; font-weight: 700;">₹56,100 / Month</span></div>
+                    <div class="salary-item"><span class="salary-role">Lieutenant / Flying Officer</span><span class="salary-amount" style="color: #10b981; font-weight: 700;">₹8.5 - ₹14.0 LPA + Army Perks</span></div>
+                `;
+                actionPlan = `
+                    <li><span class="bullet-point">1.</span> <span><strong>Month 1:</strong> Daily 5km running & physical endurance workouts.</span></li>
+                    <li><span class="bullet-point">2.</span> <span><strong>Month 2:</strong> Master NDA/CDS Mathematics & English written papers.</span></li>
+                    <li><span class="bullet-point">3.</span> <span><strong>Month 3:</strong> Prepare 5-day SSB psychological & GTO tasks.</span></li>
+                `;
+            } else {
+                realityCheck = `
+                    <li><span class="bullet-point">🎯</span> <span><strong>Domain Alignment:</strong> Pursuing ${interests} as a ${qual} student in ${stream} (${branch}) offers strong growth prospects.</span></li>
+                    <li><span class="bullet-point">📈</span> <span><strong>Growth Vector:</strong> Practical portfolio + industry certifications accelerate career trajectory by 3x.</span></li>
+                `;
+                pathways = `
+                    <div class="salary-item"><div><strong style="color: var(--accent);">Pathway 1: Specialized Domain Track</strong><p style="font-size: 0.85rem; opacity: 0.8; margin-top: 2px;">Direct certification or degree in ${interests}.</p></div></div>
+                    <div class="salary-item"><div><strong style="color: var(--accent);">Pathway 2: Corporate & Tech Integration</strong><p style="font-size: 0.85rem; opacity: 0.8; margin-top: 2px;">Combine ${interests} with digital skills and analytics.</p></div></div>
+                `;
+                skills = `
+                    <li><span class="bullet-point">🛠️</span> <span>Core domain expertise in ${interests}</span></li>
+                    <li><span class="bullet-point">🗣️</span> <span>Professional communication & project presentation</span></li>
+                `;
+                salary = `
+                    <div class="salary-item"><span class="salary-role">Entry Level Professional</span><span class="salary-amount" style="color: #10b981; font-weight: 700;">₹3.8 - ₹6.5 LPA</span></div>
+                    <div class="salary-item"><span class="salary-role">Experienced Specialist</span><span class="salary-amount" style="color: #10b981; font-weight: 700;">₹8.0 - ₹16.0 LPA</span></div>
+                `;
+                actionPlan = `
+                    <li><span class="bullet-point">1.</span> <span><strong>Month 1:</strong> Enroll in a recognized certification course for ${interests}.</span></li>
+                    <li><span class="bullet-point">2.</span> <span><strong>Month 2:</strong> Complete 2 real-world practical projects.</span></li>
+                    <li><span class="bullet-point">3.</span> <span><strong>Month 3:</strong> Build resume & apply for target internships/roles.</span></li>
+                `;
+            }
 
             return `
                 <div class="guidance-section">
                     <h3 class="section-title">${greeting}</h3>
                     <p style="margin-top: 6px; font-size: 0.95rem; opacity: 0.9;">
-                        Qualification: <strong>${qual}</strong> | Field: <strong>${stream} (${branch})</strong> | Target: <strong>${interests}</strong>
+                        Qualification: <strong>${qual}</strong> | Field: <strong>${stream} (${branch})</strong> | Goal: <strong>${interests}</strong>
                     </p>
                 </div>
 
                 <div class="guidance-section">
-                    <h3 class="section-title">📊 Current Market & Stream Reality Check</h3>
-                    <ul class="skills-list">
-                        <li><span class="bullet-point">🎯</span> <span><strong>Direct Compatibility:</strong> Your background in ${stream} provides a strong base for ${interests}.</span></li>
-                        <li><span class="bullet-point">📈</span> <span><strong>Industry Demand:</strong> Roles related to ${interests} are growing at ~18% annually in India and globally.</span></li>
-                        <li><span class="bullet-point">💡</span> <span><strong>Key Growth Driver:</strong> Hands-on practical projects + certifications carry 3x more weight than theoretical degrees alone.</span></li>
-                    </ul>
+                    <h3 class="section-title">📊 Market & Domain Reality Check</h3>
+                    <ul class="skills-list">${realityCheck}</ul>
                 </div>
 
                 <div class="guidance-section">
                     <h3 class="section-title">🎯 Top Recommended Career Pathways</h3>
-                    <div class="salary-list">
-                        <div class="salary-item">
-                            <div>
-                                <strong style="color: var(--accent);">Pathway 1: Core Professional Track</strong>
-                                <p style="font-size: 0.85rem; opacity: 0.8; margin-top: 2px;">Pursue specialized degrees or domain certifications directly aligned with ${interests}.</p>
-                            </div>
-                        </div>
-                        <div class="salary-item">
-                            <div>
-                                <strong style="color: var(--accent);">Pathway 2: Public Sector & Government Exams</strong>
-                                <p style="font-size: 0.85rem; opacity: 0.8; margin-top: 2px;">Target SSC CGL, State PSC, Banking (IBPS), or Defense depending on eligibility.</p>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="salary-list">${pathways}</div>
                 </div>
 
                 <div class="guidance-section">
-                    <h3 class="section-title">💰 Salary Benchmarks & Entry Roles</h3>
-                    <div class="salary-list">
-                        <div class="salary-item">
-                            <span class="salary-role">Fresher / Entry-Level Role</span>
-                            <span class="salary-amount" style="color: #10b981; font-weight: 700;">₹3.5 - ₹6.5 LPA</span>
-                        </div>
-                        <div class="salary-item">
-                            <span class="salary-role">Mid-Level Professional (2-4 Yrs)</span>
-                            <span class="salary-amount" style="color: #10b981; font-weight: 700;">₹7.0 - ₹12.5 LPA</span>
-                        </div>
-                        <div class="salary-item">
-                            <span class="salary-role">Senior Specialist / Manager</span>
-                            <span class="salary-amount" style="color: #10b981; font-weight: 700;">₹15.0 - ₹25.0+ LPA</span>
-                        </div>
-                    </div>
+                    <h3 class="section-title">🛠️ High-Demand Skills To Master</h3>
+                    <ul class="skills-list">${skills}</ul>
                 </div>
 
                 <div class="guidance-section">
-                    <h3 class="section-title">🚀 5-Step Execution Action Plan</h3>
-                    <ol class="plan-list">
-                        <li><span class="bullet-point">1.</span> <span><strong>Month 1:</strong> Finalize target specialization & complete 1 fundamental online certification.</span></li>
-                        <li><span class="bullet-point">2.</span> <span><strong>Month 2:</strong> Create a polished LinkedIn profile and professional resume.</span></li>
-                        <li><span class="bullet-point">3.</span> <span><strong>Month 3:</strong> Build 2 practical portfolio projects demonstrating skills in ${interests}.</span></li>
-                        <li><span class="bullet-point">4.</span> <span><strong>Month 4:</strong> Apply for internships, entry-level jobs, or competitive entrance exams.</span></li>
-                        <li><span class="bullet-point">5.</span> <span><strong>Ongoing:</strong> Practice mock interviews and stay updated with current industry trends.</span></li>
-                    </ol>
+                    <h3 class="section-title">💰 Industry Salary Benchmarks</h3>
+                    <div class="salary-list">${salary}</div>
+                </div>
+
+                <div class="guidance-section">
+                    <h3 class="section-title">🚀 Step-by-Step Execution Action Plan</h3>
+                    <ol class="plan-list">${actionPlan}</ol>
                 </div>
 
                 <div class="motivation-box">
                     <h3>🌟 Career Champion Motivation</h3>
-                    <p>"Consistency always beats talent. Small daily disciplined steps build an extraordinary career. You've got this, ${name}!"</p>
+                    <p>"Consistency always beats talent. Daily disciplined steps build an extraordinary career in ${interests}. You've got this, ${name}!"</p>
                 </div>
             `;
         }
